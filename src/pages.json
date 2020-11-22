@@ -1,0 +1,81 @@
+{
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [
+		{
+			"path": "pages/tabbar/home",
+			"style": {
+				"navigationBarTitleText": "农贸生鲜",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 500,
+				"backgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/tabbar/source",
+			"style": {
+				"navigationBarTitleText": "分类",
+				"enablePullDownRefresh": false,
+				"backgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/tabbar/cart",
+			"style": {
+				"navigationBarTitleText": "购物车"
+			}
+		},
+		{
+			"path": "pages/tabbar/mine",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/mine/setup",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "农贸生鲜",
+		"navigationBarBackgroundColor": "#ffffff",
+		"backgroundColor": "#F7F7F7",
+		"enablePullDownRefresh": false
+	},
+	"tabBar": {
+		"color": "#C0C4CC",
+		"selectedColor": "#ff536f",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/tabbar/home",
+				"iconPath": "static/tabbar/home.png",
+				"selectedIconPath": "static/tabbar/home-current.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/tabbar/source",
+				"iconPath": "static/tabbar/source.png",
+				"selectedIconPath": "static/tabbar/source-current.png",
+				"text": "分类"
+			},
+			{
+				"pagePath": "pages/tabbar/cart",
+				"iconPath": "static/tabbar/cart.png",
+				"selectedIconPath": "static/tabbar/cart-current.png",
+				"text": "购物车"
+			},
+			{
+				"pagePath": "pages/tabbar/mine",
+				"iconPath": "static/tabbar/mine.png",
+				"selectedIconPath": "static/tabbar/mine-current.png",
+				"text": "我的"
+			}
+		]
+	}
+}

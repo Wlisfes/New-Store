@@ -22,9 +22,9 @@
 				@change="index => (form.current = index)"
 			></u-tabs>
 			<view class="nav-sort">
-				<text class="sort-name" :class="{ active: form.sort === 1 }" @click="onSort(1)">综合</text>
-				<text class="sort-name" :class="{ active: form.sort === 2 }" @click="onSort(2)">销量</text>
-				<text class="sort-name" :class="{ active: form.sort === 3 }" @click="onSort(3)">价格</text>
+				<text class="sort-name" :class="{ active: form.sort === 1 }" @click="form.onSort(1)">综合</text>
+				<text class="sort-name" :class="{ active: form.sort === 2 }" @click="form.onSort(2)">销量</text>
+				<text class="sort-name" :class="{ active: form.sort === 3 }" @click="form.onSort(3)">价格</text>
 			</view>
 		</view>
 		<view class="scroll">
@@ -66,7 +66,7 @@ export default {
 		return {
 			form: {
 				current: 0,
-				sort: 0,
+				sort: 1,
 				onSort: sort => {
 					this.form.sort = sort
 				}
@@ -142,6 +142,7 @@ export default {
 		padding: 0 12rpx;
 		.sort-name {
 			padding: 0 24rpx;
+			transition: all 300ms;
 			&.active {
 				color: #ffb41f;
 			}

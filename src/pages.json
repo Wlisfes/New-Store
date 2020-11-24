@@ -23,7 +23,8 @@
 		{
 			"path": "pages/tabbar/cart",
 			"style": {
-				"navigationBarTitleText": "购物车"
+				"navigationBarTitleText": "购物车",
+				"navigationStyle": "default"
 			}
 		},
 		{

@@ -40,7 +40,9 @@
 			>
 				<view class="scroll-container">
 					<view class="scroll-item" v-for="(k, index) in list" :key="index">
-						<u-image class="card-picUrl" src="/static/icons/1605967031503.png" mode="widthFix"></u-image>
+						<u-image width="300rpx" height="300rpx" src="/static/icons/1605967031503.png" mode="widthFix">
+							<u-loading slot="loading"></u-loading>
+						</u-image>
 						<view class="card-name u-line-1">澳洲进口红肉橙澳洲进口红肉橙澳洲进口红肉橙</view>
 						<view class="card-footer">
 							<view class="amount">
@@ -169,22 +171,18 @@ export default {
 		border-radius: 12rpx;
 		display: flex;
 		flex-direction: column;
-		padding: 0 15rpx;
-		.card-picUrl {
-			width: 300rpx;
-			min-height: 300rpx;
-			margin: 15rpx 0;
-		}
+		padding: 15rpx 15rpx 0;
 		.card-name {
 			font-size: 30rpx;
 			color: #141f33;
+			margin-top: 15rpx;
 		}
 		.card-footer {
 			height: 48rpx;
 			display: flex;
 			align-items: center;
 			font-size: 26rpx;
-			color: #dd524d;
+			color: #fa3534;
 			margin-bottom: 20rpx;
 		}
 		.amount {

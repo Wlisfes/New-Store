@@ -11,7 +11,9 @@
 		<u-swiper class="app-swiper" :list="banners" name="imageUrl"></u-swiper>
 		<view class="classify">
 			<view class="classify-item" v-for="(k, index) in classify" :key="index">
-				<u-image width="110rpx" height="110rpx" :src="k.picUrl" mode="widthFix"></u-image>
+				<u-image width="110rpx" height="110rpx" :src="k.picUrl" mode="widthFix">
+					<u-loading slot="loading"></u-loading>
+				</u-image>
 				<text class="classify-name">水果水果</text>
 			</view>
 		</view>
@@ -26,12 +28,9 @@
 			<scroll-view class="hotcell-scroll" :scroll-x="true">
 				<view class="hotcell-item" v-for="(k, index) in 10" :key="index">
 					<view class="hotcell-image">
-						<u-image
-							width="100%"
-							height="100%"
-							src="/static/icons/1605967031503.png"
-							mode="widthFix"
-						></u-image>
+						<u-image width="100%" height="100%" src="/static/icons/1605967031503.png" mode="widthFix">
+							<u-loading slot="loading"></u-loading>
+						</u-image>
 					</view>
 					<view class="hotcell-name u-line-1">澳洲进口红肉橙</view>
 					<view class="hotcell-amount">
@@ -71,12 +70,9 @@
 			</u-waterfall> -->
 			<view class="list-container">
 				<view v-for="(item, index) in list" :key="index">
-					<u-image
-						width="300rpx"
-						height="300rpx"
-						src="/static/icons/1605967031503.png"
-						mode="widthFix"
-					></u-image>
+					<u-image width="300rpx" height="300rpx" src="/static/icons/1605967031503.png" mode="widthFix">
+						<u-loading slot="loading"></u-loading>
+					</u-image>
 				</view>
 			</view>
 		</view>
@@ -201,7 +197,7 @@ export default {
 		align-items: baseline;
 		justify-content: space-between;
 		font-size: 26rpx;
-		color: #dd524d;
+		color: #fa3534;
 		.amount-inverse {
 			font-size: 24rpx;
 			color: #99a0ad;

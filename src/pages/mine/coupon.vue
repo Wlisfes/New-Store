@@ -23,10 +23,20 @@
 					<AppCoupon :custom-style="customStyle" :dataSource="dataSource"></AppCoupon>
 				</swiper-item>
 				<swiper-item class="app-swiper-item">
-					<AppCoupon :custom-style="customStyle" :dataSource="[1, 2, 3, 4, 5]" :status="1"></AppCoupon>
+					<AppCoupon
+						:custom-style="customStyle"
+						:dataSource="[1, 2, 3, 4, 5]"
+						:status="1"
+						lineColor="#C9CED6"
+					></AppCoupon>
 				</swiper-item>
 				<swiper-item class="app-swiper-item">
-					<AppCoupon :custom-style="customStyle" :dataSource="[1, 2, 3, 4]" :status="2"></AppCoupon>
+					<AppCoupon
+						:custom-style="customStyle"
+						:dataSource="[1, 2, 3, 4]"
+						:status="2"
+						lineColor="#C9CED6"
+					></AppCoupon>
 				</swiper-item>
 			</swiper>
 		</view>

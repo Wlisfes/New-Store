@@ -22,7 +22,13 @@
 		</view>
 		<view class="order">
 			<view class="order-title">
-				<u-section title="猜你喜欢" :font-size="32" :show-line="false" color="#141f33"></u-section>
+				<u-section
+					title="我的订单"
+					sub-title="全部"
+					:font-size="32"
+					:show-line="false"
+					color="#141f33"
+				></u-section>
 			</view>
 			<view class="order-conster">
 				<view class="conster-item">
@@ -65,8 +71,10 @@
 		</view>
 		<view class="site">
 			<u-cell-group :border="false">
-				<u-cell-item icon="map" :border-bottom="false" hover-class="none" title="收货地址"></u-cell-item>
-				<u-cell-item icon="kefu-ermai" :border-bottom="false" hover-class="none" title="联系客服"></u-cell-item>
+				<u-cell-item icon="map" hover-class="none" :border-bottom="false" title="收货地址"></u-cell-item>
+				<button class="site-contact" hover-class="none" open-type="contact">
+					<u-cell-item icon="kefu-ermai" :border-bottom="false" title="联系客服"></u-cell-item>
+				</button>
 				<u-cell-item icon="chat" :border-bottom="false" hover-class="none" title="意见反馈"></u-cell-item>
 				<u-cell-item icon="setting" :border-bottom="false" hover-class="none" title="设置"></u-cell-item>
 			</u-cell-group>
@@ -83,6 +91,12 @@ export default {
 		}
 	},
 	onLoad() {},
+	//下拉刷新
+	async onPullDownRefresh() {
+		setTimeout(() => {
+			uni.stopPullDownRefresh()
+		}, 500)
+	},
 	methods: {
 		onClick(number) {
 			console.log(number)
@@ -100,6 +114,7 @@ export default {
 <style lang="scss" scoped>
 .app-container {
 	background: linear-gradient(#ffb41f 0%, #ffb41f 270rpx, #f5f7fa 270rpx);
+	overflow: hidden;
 }
 .user {
 	display: flex;
@@ -171,8 +186,15 @@ export default {
 	}
 }
 .site {
-	margin: 0 30rpx;
+	margin: 0 30rpx 30rpx;
 	border-radius: 16rpx;
 	overflow: hidden;
+	&-contact {
+		padding: 0;
+		background-color: transparent;
+		&::after {
+			border: none;
+		}
+	}
 }
 </style>

@@ -36,7 +36,13 @@
 			}
 		},
 		{
-			"path": "pages/mine/setup",
+			"path": "pages/mine/address",
+			"style": {
+				"navigationBarTitleText": "收货地址"
+			}
+		},
+		{
+			"path": "pages/mine/setting",
 			"style": {
 				"navigationBarTitleText": "设置"
 			}

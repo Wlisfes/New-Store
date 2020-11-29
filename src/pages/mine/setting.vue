@@ -6,7 +6,7 @@
 
 <script>
 export default {
-	name: 'Setup',
+	name: 'Setting',
 	data() {
 		return {}
 	},

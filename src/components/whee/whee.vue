@@ -36,7 +36,7 @@
 									<text class="u-line-1">规格：</text>
 								</view>
 								<view class="coin">
-									<view class="coin-num u-line-1">￥29.9</view>
+									<view class="coin-num u-line-1">¥29.9</view>
 									<u-number-box
 										class="coin-number"
 										:value="1"
@@ -56,7 +56,7 @@
 				<text style="font-size: 26rpx;">全选</text>
 			</u-checkbox>
 			<view class="footer-whole">
-				<text>合计:￥59.98</text>
+				<text>合计:¥59.98</text>
 			</view>
 			<u-button
 				shape="circle"

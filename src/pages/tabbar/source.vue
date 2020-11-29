@@ -46,8 +46,8 @@
 						<view class="card-name u-line-1">澳洲进口红肉橙澳洲进口红肉橙澳洲进口红肉橙</view>
 						<view class="card-footer">
 							<view class="amount">
-								<text>￥19.9</text>
-								<text class="amount-inverse">￥29.9</text>
+								<text>¥19.9</text>
+								<text class="amount-inverse">¥29.9</text>
 							</view>
 							<u-tag text="沆瀣一气" mode="dark" bg-color="#fa3534" color="#ffffff" size="mini" />
 						</view>

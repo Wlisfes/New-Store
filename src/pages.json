@@ -36,13 +36,19 @@
 		{
 			"path": "pages/mine/wallet",
 			"style": {
-				"navigationBarTitleText": "钱包"
+				"navigationBarTitleText": "钱包",
+				"navigationBarBackgroundColor": "#ff5a47",
+				"navigationBarTextStyle": "white",
+				"backgroundColorTop": "#ff5a47",
+				"backgroundColorBottom": "#f5f7fa",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/mine/coupon",
 			"style": {
-				"navigationBarTitleText": "优惠卷"
+				"navigationBarTitleText": "优惠卷",
+				"backgroundColorBottom": "#f5f7fa"
 			}
 		},
 		{

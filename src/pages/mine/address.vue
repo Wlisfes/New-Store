@@ -2,7 +2,15 @@
 	<view class="app-container">
 		<view v-if="dataSource.length === 0" class="address-empty">
 			<u-empty text="暂无收货地址" color="#616b80" mode="address"></u-empty>
-			<u-button type="warning" class="submit" size="medium" shape="circle">添加新地址</u-button>
+			<u-button
+				type="warning"
+				class="submit"
+				size="medium"
+				shape="circle"
+				@click="() => navigateTo('/pages/mine/addresstoc')"
+			>
+				<text>添加新地址</text>
+			</u-button>
 		</view>
 		<view v-else class="scroll" @touchmove.stop>
 			<scroll-view
@@ -35,7 +43,13 @@
 				</view>
 			</scroll-view>
 			<view class="scroll-submit" @touchmove.stop>
-				<u-button type="warning" shape="circle" size="medium" :custom-style="{ width: '100%' }">
+				<u-button
+					type="warning"
+					shape="circle"
+					size="medium"
+					:custom-style="{ width: '100%' }"
+					@click="() => navigateTo('/pages/mine/addresstoc')"
+				>
 					<text>添加新地址</text>
 				</u-button>
 			</view>
@@ -56,6 +70,10 @@ export default {
 		this._freshing = false
 	},
 	methods: {
+		//路由跳转
+		navigateTo(url) {
+			uni.navigateTo({ url })
+		},
 		onRestore() {
 			this.triggered = 'restore'
 			console.log('需要重置')

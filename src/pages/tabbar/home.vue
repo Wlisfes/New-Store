@@ -1,81 +1,85 @@
 <template>
 	<view class="app-container">
-		<u-search
-			placeholder="日照香炉生紫烟"
-			input-align="center"
-			margin="0 30rpx 30rpx"
-			:disabled="true"
-			:show-action="false"
-			@click="onSearch"
-		></u-search>
-		<u-swiper class="app-swiper" :list="banners" name="imageUrl"></u-swiper>
-		<view class="classify">
-			<view class="classify-item" v-for="(k, index) in classify" :key="index">
-				<u-image width="110rpx" height="110rpx" :src="k.picUrl" mode="widthFix">
-					<u-loading slot="loading"></u-loading>
-				</u-image>
-				<text class="classify-name">水果水果</text>
-			</view>
-		</view>
-		<view class="hotcell">
-			<u-section
-				title="热销推荐"
-				sub-title="查看更多"
-				:font-size="32"
-				color="#141f33"
-				sub-color="#616b80"
-			></u-section>
-			<scroll-view class="hotcell-scroll" :scroll-x="true">
-				<view class="hotcell-item" v-for="(k, index) in 10" :key="index">
-					<view class="hotcell-image">
-						<u-image width="100%" height="100%" src="/static/icons/1605967031503.png" mode="widthFix">
+		<scroll-view
+			class="scroll"
+			scroll-y
+			refresher-enabled
+			:lower-threshold="500"
+			:refresher-triggered="triggered"
+			@refresherrefresh="onRefresh"
+			@refresherrestore="onRestore"
+			@scrolltolower="onTolower"
+		>
+			<view>
+				<u-search
+					placeholder="日照香炉生紫烟"
+					input-align="center"
+					margin="0 30rpx 30rpx"
+					:disabled="true"
+					:show-action="false"
+					@click="onSearch"
+				></u-search>
+				<view class="app-swiper">
+					<u-swiper :list="banners" name="imageUrl"></u-swiper>
+				</view>
+				<view class="classify">
+					<view class="classify-item" v-for="(k, index) in classify" :key="index">
+						<u-image width="110rpx" height="110rpx" :src="k.picUrl" mode="widthFix">
 							<u-loading slot="loading"></u-loading>
 						</u-image>
-					</view>
-					<view class="hotcell-name u-line-1">澳洲进口红肉橙</view>
-					<view class="hotcell-amount">
-						<text>￥19.9</text>
-						<text class="amount-inverse">￥29.9</text>
+						<text class="classify-name">水果水果</text>
 					</view>
 				</view>
-			</scroll-view>
-		</view>
-		<view class="list">
-			<u-section title="猜你喜欢" :font-size="32" color="#141f33" :right="false"></u-section>
-			<!-- <u-waterfall ref="uWaterfall" v-model="list">
-				<template v-slot:left="{ leftList }">
-					<view v-for="(item, index) in leftList" :key="index">
-						{{ index }}
-						<u-image
-							width="300rpx"
-							height="300rpx"
-							src="/static/icons/1605967031503.png"
-							mode="widthFix"
-							:lazy-load="index > 9"
-						></u-image>
+
+				<view class="hotcell">
+					<u-section
+						title="热销推荐"
+						sub-title="查看更多"
+						:font-size="32"
+						color="#141f33"
+						sub-color="#616b80"
+					></u-section>
+					<scroll-view class="hotcell-scroll" :scroll-x="true">
+						<view class="hotcell-item" v-for="(k, index) in 10" :key="index">
+							<view class="hotcell-image">
+								<u-image
+									width="100%"
+									height="100%"
+									src="/static/icons/1605967031503.png"
+									mode="widthFix"
+								>
+									<u-loading slot="loading"></u-loading>
+								</u-image>
+							</view>
+							<view class="hotcell-name u-line-1">澳洲进口红肉橙</view>
+							<view class="hotcell-amount">
+								<text>￥19.9</text>
+								<text class="amount-inverse">￥29.9</text>
+							</view>
+						</view>
+					</scroll-view>
+				</view>
+				<view class="list">
+					<u-section title="猜你喜欢" :font-size="32" color="#141f33" :right="false"></u-section>
+
+					<view class="list-container">
+						<view v-for="(item, index) in list" :key="index">
+							<u-image
+								width="300rpx"
+								height="300rpx"
+								src="/static/icons/1605967031503.png"
+								mode="widthFix"
+							>
+								<u-loading slot="loading"></u-loading>
+							</u-image>
+						</view>
 					</view>
-				</template>
-				<template v-slot:right="{ rightList }">
-					<view v-for="(item, index) in rightList" :key="index">
-						{{ index }}
-						<u-image
-							width="300rpx"
-							height="300rpx"
-							src="/static/icons/1605967031503.png"
-							mode="widthFix"
-							:lazy-load="index > 9"
-						></u-image>
-					</view>
-				</template>
-			</u-waterfall> -->
-			<view class="list-container">
-				<view v-for="(item, index) in list" :key="index">
-					<u-image width="300rpx" height="300rpx" src="/static/icons/1605967031503.png" mode="widthFix">
-						<u-loading slot="loading"></u-loading>
-					</u-image>
+				</view>
+				<view class="app-loading">
+					<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
 				</view>
 			</view>
-		</view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -99,7 +103,8 @@ export default {
 				{ id: 9, name: '粮油', picUrl: '/static/icons/1605960878178.png' },
 				{ id: 10, name: '熟食烘培', picUrl: '/static/icons/1605960888670.png' }
 			],
-			list: Object.keys([...Array(20)])
+			list: Object.keys([...Array(20)]),
+			triggered: 'restore'
 		}
 	},
 	computed: {
@@ -107,25 +112,30 @@ export default {
 			openid: state => state.openid
 		})
 	},
-	created() {
-		console.log('created')
-		this.banner()
-	},
 	onLoad(e) {
-		console.log('onLoad')
-	},
-	onReachBottom() {
-		this.list.push(...Object.keys([...Array(20)]))
-		console.log('onReachBottom')
-	},
-	//下拉刷新
-	async onPullDownRefresh() {
-		await this.banner()
-		// this.$refs.uWaterfall.clear()
-		this.list = Object.keys([...Array(20)])
-		uni.stopPullDownRefresh()
+		this.banner()
+		this._freshing = false
 	},
 	methods: {
+		onRestore() {
+			this.triggered = 'restore'
+			console.log('需要重置')
+		},
+		onRefresh() {
+			if (this._freshing) return
+			this._freshing = true
+			console.log('下拉刷新触发')
+			setTimeout(() => {
+				this.list = Object.keys([...Array(20)])
+				this.triggered = false
+				this._freshing = false
+				console.log('下拉刷新结束')
+			}, 500)
+		},
+		onTolower() {
+			this.list.push(...Object.keys([...Array(20)]))
+			console.log(11)
+		},
 		async banner() {
 			const response = await banner({ type: 'iphone' })
 			console.log(response)
@@ -140,9 +150,20 @@ export default {
 
 <style lang="scss" scoped>
 .app-container {
-	// background-color: #F5F7FA;
+	height: 100vh;
+	overflow: hidden;
 	.app-swiper {
 		margin: 0 30rpx;
+		position: relative;
+	}
+	.scroll {
+		flex: 1;
+		overflow: hidden;
+		.app-loading {
+			background-color: #f5f7fa;
+			text-align: center;
+			padding: 32rpx;
+		}
 	}
 }
 

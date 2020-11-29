@@ -71,7 +71,13 @@
 		</view>
 		<view class="site">
 			<u-cell-group :border="false">
-				<u-cell-item icon="map" hover-class="none" :border-bottom="false" title="收货地址"></u-cell-item>
+				<u-cell-item
+					icon="map"
+					hover-class="none"
+					:border-bottom="false"
+					title="收货地址"
+					@click="() => navigateTo('/pages/mine/address')"
+				></u-cell-item>
 				<button class="site-contact" hover-class="none" open-type="contact">
 					<u-cell-item icon="kefu-ermai" :border-bottom="false" title="联系客服"></u-cell-item>
 				</button>
@@ -98,14 +104,9 @@ export default {
 		}, 500)
 	},
 	methods: {
-		onClick(number) {
-			console.log(number)
-			uni.navigateTo({
-				url: `/pages/mine/setup?id=${new Date().getTime()}`,
-				fail(e) {
-					console.log(e)
-				}
-			})
+		//路由跳转
+		navigateTo(url) {
+			uni.navigateTo({ url })
 		}
 	}
 }

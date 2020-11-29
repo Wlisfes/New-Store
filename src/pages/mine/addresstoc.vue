@@ -112,6 +112,7 @@ export default {
 					console.log(response)
 				},
 				fail: error => {
+					console.log(error)
 					if (error.errMsg !== 'chooseAddress:fail cancel') {
 						uni.showModal({
 							content: '地理位置未授权，请授权后再使用',
@@ -137,6 +138,7 @@ export default {
 					}
 				},
 				fail: error => {
+					console.log(error)
 					if (error.errMsg !== 'chooseAddress:fail cancel') {
 						uni.showModal({
 							content: '地址获取未授权，请授权后再使用',

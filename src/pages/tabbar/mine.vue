@@ -7,15 +7,15 @@
 			</view>
 		</view>
 		<view class="keep">
-			<view class="keep-item">
+			<view class="keep-item" @click="() => navigateTo('/pages/mine/wallet')">
 				<view class="keep-number" style="color: #fa3534">20</view>
 				<view class="keep-name">钱包(元)</view>
 			</view>
-			<view class="keep-item">
+			<view class="keep-item" @click="() => navigateTo('/pages/mine/coupon')">
 				<view class="keep-number">3</view>
 				<view class="keep-name">优惠券(张)</view>
 			</view>
-			<view class="keep-item">
+			<view class="keep-item" @click="() => navigateTo('/pages/mine/favorite')">
 				<view class="keep-number">12</view>
 				<view class="keep-name">我的收藏</view>
 			</view>

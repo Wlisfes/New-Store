@@ -113,7 +113,7 @@ export default {
 				},
 				fail: error => {
 					console.log(error)
-					if (error.errMsg !== 'chooseAddress:fail cancel') {
+					if (error.errMsg !== 'chooseAddress:cancel') {
 						uni.showModal({
 							content: '地理位置未授权，请授权后再使用',
 							confirmText: '去授权',
@@ -139,7 +139,7 @@ export default {
 				},
 				fail: error => {
 					console.log(error)
-					if (error.errMsg !== 'chooseAddress:fail cancel') {
+					if (error.errMsg !== 'chooseAddress:cancel') {
 						uni.showModal({
 							content: '地址获取未授权，请授权后再使用',
 							confirmText: '去授权',

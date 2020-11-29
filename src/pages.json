@@ -34,6 +34,24 @@
 			}
 		},
 		{
+			"path": "pages/mine/wallet",
+			"style": {
+				"navigationBarTitleText": "钱包"
+			}
+		},
+		{
+			"path": "pages/mine/coupon",
+			"style": {
+				"navigationBarTitleText": "优惠卷"
+			}
+		},
+		{
+			"path": "pages/mine/favorite",
+			"style": {
+				"navigationBarTitleText": "收藏"
+			}
+		},
+		{
 			"path": "pages/mine/address",
 			"style": {
 				"navigationBarTitleText": "收货地址"

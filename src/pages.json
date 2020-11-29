@@ -42,6 +42,12 @@
 			}
 		},
 		{
+			"path": "pages/mine/addresstoc",
+			"style": {
+				"navigationBarTitleText": "新增地址"
+			}
+		},
+		{
 			"path": "pages/mine/setting",
 			"style": {
 				"navigationBarTitleText": "设置"

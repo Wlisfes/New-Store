@@ -8,16 +8,13 @@
 			"style": {
 				"navigationBarTitleText": "农贸生鲜",
 				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 500,
-				"backgroundColor": "#ffffff"
+				"onReachBottomDistance": 500
 			}
 		},
 		{
 			"path": "pages/tabbar/source",
 			"style": {
-				"navigationBarTitleText": "分类",
-				"enablePullDownRefresh": false,
-				"backgroundColor": "#ffffff"
+				"navigationBarTitleText": "分类"
 			}
 		},
 		{
@@ -30,7 +27,12 @@
 		{
 			"path": "pages/tabbar/mine",
 			"style": {
-				"navigationBarTitleText": "我的"
+				"navigationBarTitleText": "我的",
+				"navigationBarBackgroundColor": "#FFB41F",
+				"navigationBarTextStyle": "white",
+				"backgroundColorTop": "#ffb41f",
+				"backgroundColorBottom": "#f5f7fa",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -44,7 +46,7 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "农贸生鲜",
 		"navigationBarBackgroundColor": "#ffffff",
-		"backgroundColor": "#F7F7F7",
+		"backgroundColor": "#ffffff",
 		"enablePullDownRefresh": false
 	},
 	"tabBar": {

@@ -107,7 +107,7 @@ export default {
 				this.triggered = false
 				this._freshing = false
 				console.log('下拉刷新结束')
-			}, 1500)
+			}, 500)
 		},
 		onOpen(index) {
 			this.list[index].show = true

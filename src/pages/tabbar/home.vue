@@ -144,6 +144,7 @@ export default {
 	onLoad(e) {
 		this.banner()
 	},
+	onShareAppMessage() {},
 	methods: {
 		async banner() {
 			const response = await banner({ type: 'iphone' })

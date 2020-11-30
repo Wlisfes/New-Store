@@ -1,5 +1,5 @@
 <template>
-	<view class="app-container">
+	<view class="app-container" @touchmove.stop>
 		<AppScroll
 			class="scroll"
 			:customStyle="scroll.customStyle"

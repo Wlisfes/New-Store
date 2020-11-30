@@ -13,16 +13,18 @@
 			</u-button>
 		</view>
 		<view v-else class="scroll" @touchmove.stop>
-			<scroll-view
+			<AppScroll
 				class="scroll-container"
-				scroll-y
-				refresher-enabled
-				:refresher-triggered="triggered"
-				@refresherrefresh="onRefresh"
-				@refresherrestore="onRestore"
+				:customStyle="scroll.customStyle"
+				:scroll-y="scroll.scrollY"
+				:refresher-enabled="scroll.refresherEnabled"
+				:freshing="scroll.freshing"
+				:triggered="scroll.triggered"
+				@refresh="scroll.onRefresh"
+				@restore="scroll.onRestore"
 			>
 				<view class="list">
-					<view class="list-item" v-for="(props, index) in dataSource" :key="index">
+					<view class="list-item" v-for="(props, index) in scroll.dataSource" :key="index">
 						<view class="header">
 							<view class="name">李先森</view>
 							<view class="mobile u-line-1">18645672361</view>
@@ -41,7 +43,7 @@
 						</view>
 					</view>
 				</view>
-			</scroll-view>
+			</AppScroll>
 			<view class="scroll-submit" @touchmove.stop>
 				<u-button
 					type="warning"
@@ -58,35 +60,41 @@
 </template>
 
 <script>
+import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'Address',
+	components: {
+		AppScroll
+	},
 	data() {
 		return {
-			dataSource: [1, 2, 3],
-			triggered: 'restore'
+			scroll: {
+				dataSource: Object.keys([...Array(3)]),
+				customStyle: { height: '100%' },
+				scrollY: true,
+				refresherEnabled: true,
+				freshing: false,
+				triggered: false,
+				onRefresh: () => {
+					console.log('刷新')
+					this.scroll.freshing = true
+					this.scroll.triggered = true
+					setTimeout(() => {
+						this.scroll.triggered = false
+						this.scroll.freshing = false
+					}, 500)
+				},
+				onRestore: () => {
+					console.log('刷新结束')
+					this.scroll.triggered = 'restore'
+				}
+			}
 		}
-	},
-	onLoad() {
-		this._freshing = false
 	},
 	methods: {
 		//路由跳转
 		navigateTo(url) {
 			uni.navigateTo({ url })
-		},
-		onRestore() {
-			this.triggered = 'restore'
-			console.log('需要重置')
-		},
-		onRefresh() {
-			if (this._freshing) return
-			this._freshing = true
-			console.log('下拉刷新触发')
-			setTimeout(() => {
-				this.triggered = false
-				this._freshing = false
-				console.log('下拉刷新结束')
-			}, 500)
 		}
 	}
 }

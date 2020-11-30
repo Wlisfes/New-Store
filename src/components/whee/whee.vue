@@ -1,14 +1,15 @@
 <template>
-	<view class="app-whee">
+	<view class="app-whee" @touchmove.stop>
 		<!-- <view class="header" @touchmove.stop></view> -->
-		<scroll-view
+		<AppScroll
 			class="scroll"
-			scroll-y
-			refresher-enabled
-			:lower-threshold="500"
-			:refresher-triggered="triggered"
-			@refresherrefresh="onRefresh"
-			@refresherrestore="onRestore"
+			:customStyle="scroll.customStyle"
+			:scroll-y="scroll.scrollY"
+			:refresher-enabled="scroll.refresherEnabled"
+			:freshing="scroll.freshing"
+			:triggered="scroll.triggered"
+			@refresh="scroll.onRefresh"
+			@restore="scroll.onRestore"
 		>
 			<view class="scroll-container">
 				<view class="list">
@@ -16,11 +17,11 @@
 						:show="item.show"
 						:index="index"
 						btn-width="150"
-						v-for="(item, index) in list"
+						v-for="(item, index) in swipe.dataSource"
 						:key="index"
-						:options="options"
-						@open="onOpen"
-						@click="onClick"
+						:options="swipe.options"
+						@open="swipe.onOpen"
+						@click="swipe.onClick"
 					>
 						<view class="list-item">
 							<u-checkbox v-model="item.checked" shape="circle" active-color="#fa3534"></u-checkbox>
@@ -50,9 +51,9 @@
 					</u-swipe-action>
 				</view>
 			</view>
-		</scroll-view>
+		</AppScroll>
 		<view class="footer" @touchmove.stop>
-			<u-checkbox v-model="checked" shape="circle" active-color="#fa3534">
+			<u-checkbox v-model="swipe.checked" shape="circle" active-color="#fa3534">
 				<text style="font-size: 26rpx;">全选</text>
 			</u-checkbox>
 			<view class="footer-whole">
@@ -72,55 +73,62 @@
 </template>
 
 <script>
+import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'Whee',
+	components: {
+		AppScroll
+	},
 	data() {
 		return {
-			list: Object.keys([...Array(30)]).map(i => ({
-				id: i,
-				title: '长安回望绣成堆，山顶千门次第开，一骑红尘妃子笑，无人知是荔枝来',
-				show: false,
-				checked: false
-			})),
-			options: [
-				{ text: '收藏', style: { backgroundColor: '#007aff' } },
-				{ text: '删除', style: { backgroundColor: '#dd524d' } }
-			],
-			triggered: 'restore',
-
-			checked: false
+			scroll: {
+				customStyle: { height: '100%' },
+				scrollY: true,
+				refresherEnabled: true,
+				freshing: false,
+				triggered: false,
+				onRefresh: () => {
+					console.log('刷新')
+					this.scroll.freshing = true
+					this.scroll.triggered = true
+					setTimeout(() => {
+						this.scroll.triggered = false
+						this.scroll.freshing = false
+					}, 500)
+				},
+				onRestore: () => {
+					console.log('刷新结束')
+					this.scroll.triggered = 'restore'
+				}
+			},
+			swipe: {
+				checked: false,
+				dataSource: Object.keys([...Array(10)]).map(i => ({
+					id: i,
+					title: '长安回望绣成堆，山顶千门次第开，一骑红尘妃子笑，无人知是荔枝来',
+					show: false,
+					checked: false
+				})),
+				options: [
+					{ text: '收藏', style: { backgroundColor: '#007aff' } },
+					{ text: '删除', style: { backgroundColor: '#dd524d' } }
+				],
+				onOpen: index => {
+					this.swipe.dataSource[index].show = true
+					this.swipe.dataSource.map((val, idx) => {
+						if (index != idx) {
+							this.swipe.dataSource[idx].show = false
+						}
+					})
+				},
+				onClick(index) {
+					const text = this.swipe.options[index].text
+					this.$u.toast(text)
+				}
+			}
 		}
 	},
-	onLoad() {
-		this._freshing = false
-	},
-	methods: {
-		onRestore() {
-			this.triggered = 'restore'
-			console.log('需要重置')
-		},
-		onRefresh() {
-			if (this._freshing) return
-			this._freshing = true
-			console.log('下拉刷新触发')
-			setTimeout(() => {
-				this.triggered = false
-				this._freshing = false
-				console.log('下拉刷新结束')
-			}, 500)
-		},
-		onOpen(index) {
-			this.list[index].show = true
-			this.list.map((val, idx) => {
-				if (index != idx) this.list[idx].show = false
-			})
-		},
-		onClick(index) {
-			console.log(index)
-			const text = this.options[index].text
-			this.$u.toast(text)
-		}
-	}
+	methods: {}
 }
 </script>
 

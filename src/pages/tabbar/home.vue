@@ -1,14 +1,16 @@
 <template>
 	<view class="app-container">
-		<scroll-view
+		<AppScroll
 			class="scroll"
-			scroll-y
-			refresher-enabled
-			:lower-threshold="500"
-			:refresher-triggered="triggered"
-			@refresherrefresh="onRefresh"
-			@refresherrestore="onRestore"
-			@scrolltolower="onTolower"
+			:customStyle="scroll.customStyle"
+			:scroll-y="scroll.scrollY"
+			:refresher-enabled="scroll.refresherEnabled"
+			:lower-threshold="scroll.lowerThreshold"
+			:freshing="scroll.freshing"
+			:triggered="scroll.triggered"
+			@refresh="scroll.onRefresh"
+			@restore="scroll.onRestore"
+			@tolower="scroll.onTolower"
 		>
 			<view>
 				<u-search
@@ -63,7 +65,7 @@
 					<u-section title="猜你喜欢" :font-size="32" color="#141f33" :right="false"></u-section>
 
 					<view class="list-container">
-						<view v-for="(item, index) in list" :key="index">
+						<view v-for="(item, index) in scroll.dataSource" :key="index">
 							<u-image
 								width="300rpx"
 								height="300rpx"
@@ -79,15 +81,19 @@
 					<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
 				</view>
 			</view>
-		</scroll-view>
+		</AppScroll>
 	</view>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import { banner } from '@/api/common'
+import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'Home',
+	components: {
+		AppScroll
+	},
 	data() {
 		return {
 			banners: [],
@@ -103,8 +109,31 @@ export default {
 				{ id: 9, name: '粮油', picUrl: '/static/icons/1605960878178.png' },
 				{ id: 10, name: '熟食烘培', picUrl: '/static/icons/1605960888670.png' }
 			],
-			list: Object.keys([...Array(20)]),
-			triggered: 'restore'
+			scroll: {
+				dataSource: Object.keys([...Array(20)]),
+				customStyle: { height: '100%' },
+				scrollY: true,
+				refresherEnabled: true,
+				lowerThreshold: 500,
+				freshing: false,
+				triggered: false,
+				onRefresh: () => {
+					console.log('刷新')
+					this.scroll.freshing = true
+					this.scroll.triggered = true
+					setTimeout(() => {
+						this.scroll.triggered = false
+						this.scroll.freshing = false
+					}, 500)
+				},
+				onRestore: () => {
+					console.log('刷新结束')
+					this.scroll.triggered = 'restore'
+				},
+				onTolower: () => {
+					this.scroll.dataSource.push(...Object.keys([...Array(20)]))
+				}
+			}
 		}
 	},
 	computed: {
@@ -114,28 +143,8 @@ export default {
 	},
 	onLoad(e) {
 		this.banner()
-		this._freshing = false
 	},
 	methods: {
-		onRestore() {
-			this.triggered = 'restore'
-			console.log('需要重置')
-		},
-		onRefresh() {
-			if (this._freshing) return
-			this._freshing = true
-			console.log('下拉刷新触发')
-			setTimeout(() => {
-				this.list = Object.keys([...Array(20)])
-				this.triggered = false
-				this._freshing = false
-				console.log('下拉刷新结束')
-			}, 500)
-		},
-		onTolower() {
-			this.list.push(...Object.keys([...Array(20)]))
-			console.log(11)
-		},
 		async banner() {
 			const response = await banner({ type: 'iphone' })
 			console.log(response)

@@ -4,7 +4,7 @@
 		:style="[customStyle]"
 		:scroll-y="scrollY"
 		:refresher-enabled="refresherEnabled"
-		:lower-threshold="500"
+		:lower-threshold="lowerThreshold"
 		:refresher-triggered="triggered"
 		@refresherrefresh="onRefresh"
 		@refresherrestore="onRestore"

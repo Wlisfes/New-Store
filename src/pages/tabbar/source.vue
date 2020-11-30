@@ -28,7 +28,7 @@
 			</view>
 		</view>
 		<view class="scroll">
-			<scroll-view
+			<!-- <scroll-view
 				class="scroll-context"
 				scroll-y
 				refresher-enabled
@@ -56,14 +56,49 @@
 				<view class="app-loading">
 					<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
 				</view>
-			</scroll-view>
+			</scroll-view> -->
+			<AppScroll
+				class="scroll-context"
+				:customStyle="scroll.customStyle"
+				:scroll-y="scroll.scrollY"
+				:refresher-enabled="scroll.refresherEnabled"
+				:lower-threshold="scroll.lowerThreshold"
+				:freshing="scroll.freshing"
+				:triggered="scroll.triggered"
+				@refresh="scroll.onRefresh"
+				@restore="scroll.onRestore"
+				@tolower="scroll.onTolower"
+			>
+				<view class="scroll-container">
+					<view class="scroll-item" v-for="(k, index) in scroll.dataSource" :key="index">
+						<u-image width="300rpx" height="300rpx" src="/static/icons/1605967031503.png" mode="widthFix">
+							<u-loading slot="loading"></u-loading>
+						</u-image>
+						<view class="card-name u-line-1">澳洲进口红肉橙澳洲进口红肉橙澳洲进口红肉橙</view>
+						<view class="card-footer">
+							<view class="amount">
+								<text>¥19.9</text>
+								<text class="amount-inverse">¥29.9</text>
+							</view>
+							<u-tag text="沆瀣一气" mode="dark" bg-color="#fa3534" color="#ffffff" size="mini" />
+						</view>
+					</view>
+				</view>
+				<view class="app-loading">
+					<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
+				</view>
+			</AppScroll>
 		</view>
 	</view>
 </template>
 
 <script>
+import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'Source',
+	components: {
+		AppScroll
+	},
 	data() {
 		return {
 			form: {
@@ -85,33 +120,34 @@ export default {
 				{ id: 9, name: '粮油', picUrl: '/static/icons/1605960878178.png' },
 				{ id: 10, name: '熟食烘培', picUrl: '/static/icons/1605960888670.png' }
 			],
-			list: Object.keys([...Array(20)]),
-			triggered: 'restore'
+			scroll: {
+				dataSource: Object.keys([...Array(20)]),
+				customStyle: { height: '100%' },
+				scrollY: true,
+				refresherEnabled: true,
+				lowerThreshold: 500,
+				freshing: false,
+				triggered: false,
+				onRefresh: () => {
+					console.log('刷新')
+					this.scroll.freshing = true
+					this.scroll.triggered = true
+					setTimeout(() => {
+						this.scroll.triggered = false
+						this.scroll.freshing = false
+					}, 500)
+				},
+				onRestore: () => {
+					console.log('刷新结束')
+					this.scroll.triggered = 'restore'
+				},
+				onTolower: () => {
+					this.scroll.dataSource.push(...Object.keys([...Array(20)]))
+				}
+			}
 		}
 	},
-	onLoad() {
-		this._freshing = false
-	},
-	methods: {
-		onRestore() {
-			this.triggered = 'restore'
-			console.log('需要重置')
-		},
-		onRefresh() {
-			if (this._freshing) return
-			this._freshing = true
-			console.log('下拉刷新触发')
-			setTimeout(() => {
-				this.triggered = false
-				this._freshing = false
-				console.log('下拉刷新结束')
-			}, 500)
-		},
-		onTolower() {
-			this.list.push(...Object.keys([...Array(20)]))
-			console.log(11)
-		}
-	}
+	methods: {}
 }
 </script>
 

@@ -63,10 +63,11 @@ export default {
 				scrollY: true,
 				refresherEnabled: true,
 				freshing: false,
-				triggered: 'restore',
+				triggered: false,
 				onRefresh: () => {
 					console.log('刷新')
 					this.scroll.freshing = true
+					this.scroll.triggered = true
 					setTimeout(() => {
 						this.scroll.triggered = false
 						this.scroll.freshing = false

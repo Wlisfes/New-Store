@@ -180,6 +180,7 @@ export default {
 		display: flex;
 		flex-direction: column;
 		padding: 15rpx 15rpx 0;
+		box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.08);
 		.card-name {
 			font-size: 30rpx;
 			color: #141f33;

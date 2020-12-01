@@ -142,6 +142,7 @@ export default {
 		padding: 0 30rpx;
 		margin-top: 30rpx;
 		overflow: hidden;
+		box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.08);
 	}
 	.header {
 		height: 44rpx;

@@ -97,6 +97,7 @@ export default {
 		border-radius: 12rpx;
 		overflow: hidden;
 		background-color: #ffffff;
+		box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.08);
 		&:last-child {
 			margin-bottom: 30rpx;
 		}

@@ -145,6 +145,7 @@ export default {
 		margin-top: 30rpx;
 		padding: 20rpx;
 		background-color: #ffffff;
+		box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.08);
 		&:last-child {
 			margin-bottom: 30rpx;
 		}

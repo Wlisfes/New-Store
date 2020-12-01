@@ -1,5 +1,20 @@
 <template>
 	<view class="app-container" @touchmove.stop>
+		<view class="app-header">
+			<u-tabs
+				class="app-header-nav"
+				:list="form.navs"
+				:current="form.current"
+				:show-bar="false"
+				:height="56"
+				:font-size="28"
+				:bold="false"
+				:bar-height="0"
+				active-color="#ffffff"
+				:active-item-style="{ backgroundColor: '#ffb41f' }"
+				@change="index => (form.current = index)"
+			></u-tabs>
+		</view>
 		<AppScroll
 			class="scroll"
 			:customStyle="scroll.customStyle"
@@ -42,6 +57,24 @@ export default {
 	},
 	data() {
 		return {
+			form: {
+				current: 0,
+				navs: [
+					{ id: 1, name: '水果', picUrl: '/static/icons/1605951261225.png' },
+					{ id: 2, name: '蔬菜', picUrl: '/static/icons/1605960766279.png' },
+					{ id: 3, name: '家禽', picUrl: '/static/icons/1605960791822.png' },
+					{ id: 4, name: '家畜', picUrl: '/static/icons/1605960804484.png' },
+					{ id: 5, name: '水产', picUrl: '/static/icons/1605960827823.png' },
+					{ id: 6, name: '蛋类', picUrl: '/static/icons/1605960843547.png' },
+					{ id: 7, name: '卤制品', picUrl: '/static/icons/1605960853385.png' },
+					{ id: 8, name: '饮品', picUrl: '/static/icons/1605960866246.png' },
+					{ id: 9, name: '粮油', picUrl: '/static/icons/1605960878178.png' },
+					{ id: 10, name: '熟食烘培', picUrl: '/static/icons/1605960888670.png' }
+				],
+				onSort: sort => {
+					this.form.sort = sort
+				}
+			},
 			scroll: {
 				dataSource: Object.keys([...Array(10)]).map(i => ({
 					id: i,
@@ -85,6 +118,18 @@ export default {
 			background-color: #f5f7fa;
 			text-align: center;
 			padding: 32rpx;
+		}
+	}
+	.app-header {
+		padding: 12rpx 24rpx 24rpx;
+		background-color: #ffffff;
+		&-nav {
+			/deep/ .u-tab-item {
+				background-color: #f0f2f5;
+				margin-right: 24rpx;
+				border-radius: 8rpx;
+				color: #141f33;
+			}
 		}
 	}
 }

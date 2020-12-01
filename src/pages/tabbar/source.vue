@@ -10,7 +10,7 @@
 			></u-search>
 			<u-tabs
 				class="nav-tabs"
-				:list="navs"
+				:list="form.navs"
 				:current="form.current"
 				:show-bar="false"
 				:height="56"
@@ -28,35 +28,6 @@
 			</view>
 		</view>
 		<view class="scroll">
-			<!-- <scroll-view
-				class="scroll-context"
-				scroll-y
-				refresher-enabled
-				:lower-threshold="500"
-				:refresher-triggered="triggered"
-				@refresherrefresh="onRefresh"
-				@refresherrestore="onRestore"
-				@scrolltolower="onTolower"
-			>
-				<view class="scroll-container">
-					<view class="scroll-item" v-for="(k, index) in list" :key="index">
-						<u-image width="300rpx" height="300rpx" src="/static/icons/1605967031503.png" mode="widthFix">
-							<u-loading slot="loading"></u-loading>
-						</u-image>
-						<view class="card-name u-line-1">澳洲进口红肉橙澳洲进口红肉橙澳洲进口红肉橙</view>
-						<view class="card-footer">
-							<view class="amount">
-								<text>¥19.9</text>
-								<text class="amount-inverse">¥29.9</text>
-							</view>
-							<u-tag text="沆瀣一气" mode="dark" bg-color="#fa3534" color="#ffffff" size="mini" />
-						</view>
-					</view>
-				</view>
-				<view class="app-loading">
-					<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
-				</view>
-			</scroll-view> -->
 			<AppScroll
 				class="scroll-context"
 				:customStyle="scroll.customStyle"
@@ -104,22 +75,22 @@ export default {
 			form: {
 				current: 0,
 				sort: 1,
+				navs: [
+					{ id: 1, name: '水果', picUrl: '/static/icons/1605951261225.png' },
+					{ id: 2, name: '蔬菜', picUrl: '/static/icons/1605960766279.png' },
+					{ id: 3, name: '家禽', picUrl: '/static/icons/1605960791822.png' },
+					{ id: 4, name: '家畜', picUrl: '/static/icons/1605960804484.png' },
+					{ id: 5, name: '水产', picUrl: '/static/icons/1605960827823.png' },
+					{ id: 6, name: '蛋类', picUrl: '/static/icons/1605960843547.png' },
+					{ id: 7, name: '卤制品', picUrl: '/static/icons/1605960853385.png' },
+					{ id: 8, name: '饮品', picUrl: '/static/icons/1605960866246.png' },
+					{ id: 9, name: '粮油', picUrl: '/static/icons/1605960878178.png' },
+					{ id: 10, name: '熟食烘培', picUrl: '/static/icons/1605960888670.png' }
+				],
 				onSort: sort => {
 					this.form.sort = sort
 				}
 			},
-			navs: [
-				{ id: 1, name: '水果', picUrl: '/static/icons/1605951261225.png' },
-				{ id: 2, name: '蔬菜', picUrl: '/static/icons/1605960766279.png' },
-				{ id: 3, name: '家禽', picUrl: '/static/icons/1605960791822.png' },
-				{ id: 4, name: '家畜', picUrl: '/static/icons/1605960804484.png' },
-				{ id: 5, name: '水产', picUrl: '/static/icons/1605960827823.png' },
-				{ id: 6, name: '蛋类', picUrl: '/static/icons/1605960843547.png' },
-				{ id: 7, name: '卤制品', picUrl: '/static/icons/1605960853385.png' },
-				{ id: 8, name: '饮品', picUrl: '/static/icons/1605960866246.png' },
-				{ id: 9, name: '粮油', picUrl: '/static/icons/1605960878178.png' },
-				{ id: 10, name: '熟食烘培', picUrl: '/static/icons/1605960888670.png' }
-			],
 			scroll: {
 				dataSource: Object.keys([...Array(20)]),
 				customStyle: { height: '100%' },

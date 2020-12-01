@@ -96,7 +96,13 @@ export default {
 	},
 	data() {
 		return {
-			banners: [],
+			banners: [
+				{ imageUrl: '/static/icons/1606830628386.png' },
+				{ imageUrl: '/static/icons/1606830628386.png' },
+				{ imageUrl: '/static/icons/1606830628386.png' },
+				{ imageUrl: '/static/icons/1606830628386.png' },
+				{ imageUrl: '/static/icons/1606830628386.png' }
+			],
 			classify: [
 				{ id: 1, name: '水果', picUrl: '/static/icons/1605951261225.png' },
 				{ id: 2, name: '蔬菜', picUrl: '/static/icons/1605960766279.png' },
@@ -142,7 +148,7 @@ export default {
 		})
 	},
 	onLoad(e) {
-		this.banner()
+		// this.banner()
 	},
 	onShareAppMessage() {},
 	methods: {

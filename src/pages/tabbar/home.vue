@@ -62,10 +62,11 @@
 					</scroll-view>
 				</view>
 				<view class="list">
-					<u-section title="猜你喜欢" :font-size="32" color="#141f33" :right="false"></u-section>
-
+					<view class="list-title">
+						<u-section title="猜你喜欢" :font-size="32" color="#141f33" :right="false"></u-section>
+					</view>
 					<view class="list-container">
-						<view v-for="(item, index) in scroll.dataSource" :key="index">
+						<view class="list-item" v-for="(k, index) in scroll.dataSource" :key="index">
 							<u-image
 								width="300rpx"
 								height="300rpx"
@@ -74,6 +75,14 @@
 							>
 								<u-loading slot="loading"></u-loading>
 							</u-image>
+							<view class="card-name u-line-1">澳洲进口红肉橙澳洲进口红肉橙澳洲进口红肉橙</view>
+							<view class="card-footer">
+								<view class="amount">
+									<text>¥19.9</text>
+									<text class="amount-inverse">¥29.9</text>
+								</view>
+								<u-tag text="沆瀣一气" mode="dark" bg-color="#fa3534" color="#ffffff" size="mini" />
+							</view>
 						</view>
 					</view>
 				</view>
@@ -128,6 +137,7 @@ export default {
 					this.scroll.freshing = true
 					this.scroll.triggered = true
 					setTimeout(() => {
+						this.scroll.dataSource = Object.keys([...Array(20)])
 						this.scroll.triggered = false
 						this.scroll.freshing = false
 					}, 500)
@@ -176,7 +186,6 @@ export default {
 		flex: 1;
 		overflow: hidden;
 		.app-loading {
-			background-color: #f5f7fa;
 			text-align: center;
 			padding: 32rpx;
 		}
@@ -243,11 +252,47 @@ export default {
 	}
 }
 .list {
-	padding: 0 30rpx;
-	background-color: #f5f7fa;
+	background-color: #ffffff;
+	&-title {
+		padding: 0 30rpx 30rpx;
+	}
 	&-container {
 		display: flex;
 		flex-wrap: wrap;
+		padding: 0 15rpx 30rpx;
+		background-color: #f5f7fa;
+	}
+	&-item {
+		width: 330rpx;
+		margin: 30rpx 15rpx 0;
+		background-color: #ffffff;
+		border-radius: 12rpx;
+		display: flex;
+		flex-direction: column;
+		padding: 15rpx 15rpx 0;
+		.card-name {
+			font-size: 30rpx;
+			color: #141f33;
+			margin-top: 15rpx;
+		}
+		.card-footer {
+			height: 48rpx;
+			display: flex;
+			align-items: center;
+			font-size: 26rpx;
+			color: #fa3534;
+			margin-bottom: 20rpx;
+		}
+		.amount {
+			flex: 1;
+			display: flex;
+			align-items: center;
+		}
+		.amount-inverse {
+			font-size: 24rpx;
+			color: #99a0ad;
+			text-decoration: line-through;
+		}
 	}
 }
 </style>

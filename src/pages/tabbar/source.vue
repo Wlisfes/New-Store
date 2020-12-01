@@ -104,6 +104,7 @@ export default {
 					this.scroll.freshing = true
 					this.scroll.triggered = true
 					setTimeout(() => {
+						this.scroll.dataSource = Object.keys([...Array(20)])
 						this.scroll.triggered = false
 						this.scroll.freshing = false
 					}, 500)

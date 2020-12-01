@@ -81,7 +81,13 @@
 				<button class="site-contact" hover-class="none" open-type="contact">
 					<u-cell-item icon="kefu-ermai" :border-bottom="false" title="联系客服"></u-cell-item>
 				</button>
-				<u-cell-item icon="chat" :border-bottom="false" hover-class="none" title="意见反馈"></u-cell-item>
+				<u-cell-item
+					icon="chat"
+					:border-bottom="false"
+					hover-class="none"
+					title="意见反馈"
+					@click="() => navigateTo('/pages/mine/feedback')"
+				></u-cell-item>
 				<u-cell-item icon="setting" :border-bottom="false" hover-class="none" title="设置"></u-cell-item>
 			</u-cell-group>
 		</view>

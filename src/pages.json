@@ -70,6 +70,14 @@
 			}
 		},
 		{
+			"path": "pages/mine/feedback",
+			"style": {
+				"navigationBarTitleText": "意见反馈",
+				"backgroundColorTop": "#f5f7fa",
+				"backgroundColorBottom": "#f5f7fa"
+			}
+		},
+		{
 			"path": "pages/mine/setting",
 			"style": {
 				"navigationBarTitleText": "设置"

@@ -27,7 +27,12 @@
 			@restore="scroll.onRestore"
 		>
 			<view class="list">
-				<view class="list-item" v-for="(item, index) in scroll.dataSource" :key="index">
+				<view
+					class="list-item"
+					v-for="(item, index) in scroll.dataSource"
+					:key="index"
+					@click="() => navigateTo('/pages/home/product')"
+				>
 					<view class="back-image">
 						<u-image width="200rpx" height="200rpx" src="/static/icons/1605967031503.png" mode="widthFix">
 							<u-loading slot="loading"></u-loading>
@@ -101,6 +106,12 @@ export default {
 					this.scroll.triggered = 'restore'
 				}
 			}
+		}
+	},
+	methods: {
+		//路由跳转
+		navigateTo(url) {
+			uni.navigateTo({ url })
 		}
 	}
 }

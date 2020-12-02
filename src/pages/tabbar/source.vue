@@ -41,7 +41,12 @@
 				@tolower="scroll.onTolower"
 			>
 				<view class="scroll-container">
-					<view class="scroll-item" v-for="(k, index) in scroll.dataSource" :key="index">
+					<view
+						class="scroll-item"
+						v-for="(k, index) in scroll.dataSource"
+						:key="index"
+						@click="() => navigateTo('/pages/home/product')"
+					>
 						<u-image width="300rpx" height="300rpx" src="/static/icons/1605967031503.png" mode="widthFix">
 							<u-loading slot="loading"></u-loading>
 						</u-image>
@@ -119,7 +124,12 @@ export default {
 			}
 		}
 	},
-	methods: {}
+	methods: {
+		//路由跳转
+		navigateTo(url) {
+			uni.navigateTo({ url })
+		}
+	}
 }
 </script>
 

@@ -42,7 +42,12 @@
 						sub-color="#616b80"
 					></u-section>
 					<scroll-view class="hotcell-scroll" :scroll-x="true">
-						<view class="hotcell-item" v-for="(k, index) in 10" :key="index">
+						<view
+							class="hotcell-item"
+							v-for="(k, index) in 10"
+							:key="index"
+							@click="() => navigateTo('/pages/home/product')"
+						>
 							<view class="hotcell-image">
 								<u-image
 									width="100%"
@@ -66,7 +71,12 @@
 						<u-section title="猜你喜欢" :font-size="32" color="#141f33" :right="false"></u-section>
 					</view>
 					<view class="list-container">
-						<view class="list-item" v-for="(k, index) in scroll.dataSource" :key="index">
+						<view
+							class="list-item"
+							v-for="(k, index) in scroll.dataSource"
+							:key="index"
+							@click="() => navigateTo('/pages/home/product')"
+						>
 							<u-image
 								width="300rpx"
 								height="300rpx"
@@ -168,6 +178,10 @@ export default {
 			if (response.code === 200) {
 				this.banners = response.banners
 			}
+		},
+		//路由跳转
+		navigateTo(url) {
+			uni.navigateTo({ url })
 		},
 		onSearch() {}
 	}

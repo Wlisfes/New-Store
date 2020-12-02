@@ -23,7 +23,7 @@
 						@open="swipe.onOpen"
 						@click="swipe.onClick"
 					>
-						<view class="list-item">
+						<view class="list-item" @click="() => navigateTo('/pages/home/product')">
 							<u-checkbox v-model="item.checked" shape="circle" active-color="#fa3534"></u-checkbox>
 							<u-image
 								width="200rpx"
@@ -128,7 +128,12 @@ export default {
 			}
 		}
 	},
-	methods: {}
+	methods: {
+		//路由跳转
+		navigateTo(url) {
+			uni.navigateTo({ url })
+		}
+	}
 }
 </script>
 

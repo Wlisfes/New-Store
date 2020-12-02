@@ -82,6 +82,12 @@
 			"style": {
 				"navigationBarTitleText": "设置"
 			}
+		},
+		{
+			"path": "pages/home/product",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+			}
 		}
 	],
 	"globalStyle": {

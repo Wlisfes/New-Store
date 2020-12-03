@@ -4,6 +4,7 @@
 			<u-avatar class="user-avatar" :src="src" :size="108"></u-avatar>
 			<view class="user-name">
 				<text class="nickname">妖雨纯</text>
+				<u-button>未登录</u-button>
 			</view>
 		</view>
 		<view class="keep">

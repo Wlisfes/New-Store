@@ -35,15 +35,18 @@
 			</view>
 			<u-gap height="30" bg-color="#f5f7fa"></u-gap>
 		</AppScroll>
+		<AppFooter></AppFooter>
 	</view>
 </template>
 
 <script>
 import AppScroll from '@/components/common/scroll'
+import AppFooter from '@/components/common/footer'
 export default {
 	name: 'Product',
 	components: {
-		AppScroll
+		AppScroll,
+		AppFooter
 	},
 	data() {
 		return {

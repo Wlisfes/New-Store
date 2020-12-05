@@ -1,10 +1,16 @@
 <template>
 	<view class="app-container">
 		<view class="user">
-			<u-avatar class="user-avatar" :src="src" :size="108"></u-avatar>
+			<u-avatar
+				class="user-avatar"
+				:src="user.avatar || '/static/icons/1607182291897.jpg'"
+				:size="108"
+			></u-avatar>
 			<view class="user-name">
-				<text class="nickname">妖雨纯</text>
-				<u-button>未登录</u-button>
+				<text v-if="user.nickname">妖雨纯</text>
+				<button v-else class="u-reset-button login" open-type="getUserInfo" @getuserinfo="AuthUser">
+					<text>未登录</text>
+				</button>
 			</view>
 		</view>
 		<view class="keep">
@@ -96,6 +102,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
 	name: 'Mine',
 	data() {
@@ -103,7 +110,14 @@ export default {
 			src: 'https://oss.lisfes.cn/avatar/1592580988216.jpg?x-oss-process=style/resize'
 		}
 	},
-	onLoad() {},
+	computed: {
+		...mapState({
+			user: state => state.user
+		})
+	},
+	onLoad() {
+		console.log(this.user)
+	},
 	//下拉刷新
 	async onPullDownRefresh() {
 		setTimeout(() => {
@@ -114,6 +128,12 @@ export default {
 		//路由跳转
 		navigateTo(url) {
 			uni.navigateTo({ url })
+		},
+		AuthUser(e) {
+			const { errMsg, userInfo } = e.detail
+			if (errMsg === 'getUserInfo:ok') {
+				this.$store.dispatch('user/AuthUser', userInfo)
+			}
 		}
 	}
 }
@@ -135,9 +155,10 @@ export default {
 	&-name {
 		flex: 1;
 		margin-left: 24rpx;
-		.nickname {
-			font-size: 40rpx;
-			color: #ffffff;
+		font-size: 40rpx;
+		color: #ffffff;
+		.login {
+			display: inline-block;
 		}
 	}
 }

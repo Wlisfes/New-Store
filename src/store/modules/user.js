@@ -7,17 +7,21 @@ const state = {
 
 const mutations = {
 	setUser: (state, user) => {
-		console.log(user)
+		state.avatar = user.avatarUrl
+		state.nickname = user.nickName
 	}
 }
 
 const actions = {
 	//授权用户信息
-	async AuthUser({ commit }, props) {
-		console.log(props)
+	AuthUser({ commit }, props) {
+		return new Promise((resolve, reject) => {
+			commit('setUser', props)
+			resolve(props)
+		})
 	},
 	//授权用户手机号
-	async authMobile({ commit }) {}
+	async AuthMobile({ commit }) {}
 }
 
 export default {

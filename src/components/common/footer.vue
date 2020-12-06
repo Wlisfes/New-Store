@@ -28,12 +28,12 @@ export default {
 .app-footer {
 	display: flex;
 	background-color: #ffffff;
-	padding: 16rpx 30rpx;
 	padding-bottom: constant(safe-area-inset-bottomm, 16rpx);
 	padding-bottom: env(safe-area-inset-bottom, 16rpx);
 	.left {
 		display: flex;
 		font-size: 20rpx;
+		margin: 16rpx 0;
 		.item {
 			margin: 0 30rpx;
 			&.car {
@@ -52,6 +52,7 @@ export default {
 		}
 	}
 	.right {
+		margin: 16rpx 0;
 		flex: 1;
 		display: flex;
 		justify-content: space-between;

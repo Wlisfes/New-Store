@@ -17,34 +17,42 @@
 						:show="item.show"
 						:index="index"
 						btn-width="150"
-						v-for="(item, index) in swipe.dataSource"
+						v-for="(item, index) in dataSource"
 						:key="index"
 						:options="swipe.options"
 						@open="swipe.onOpen"
 						@click="swipe.onClick"
 					>
-						<view class="list-item" @click="() => navigateTo('/pages/home/product')">
-							<u-checkbox v-model="item.checked" shape="circle" active-color="#fa3534"></u-checkbox>
-							<u-image
-								width="200rpx"
-								height="200rpx"
-								src="/static/icons/1605967031503.png"
-								mode="widthFix"
-							></u-image>
-							<view class="list-content">
-								<view class="title u-line-2">{{ item.title }}</view>
-								<view class="format">
-									<text class="u-line-1">规格：</text>
-								</view>
-								<view class="coin">
-									<view class="coin-num u-line-1">¥29.9</view>
-									<u-number-box
-										class="coin-number"
-										:value="1"
-										disabled-input
-										:input-width="64"
-										:input-height="44"
-									></u-number-box>
+						<view class="list-item">
+							<u-checkbox
+								:value="item.checked"
+								name="item"
+								shape="circle"
+								active-color="#fa3534"
+								@change="props => swipe.onChange(props, index)"
+							></u-checkbox>
+							<view class="list-item-content" @click="() => navigateTo('/pages/home/product')">
+								<u-image
+									width="200rpx"
+									height="200rpx"
+									src="/static/icons/1605967031503.png"
+									mode="widthFix"
+								></u-image>
+								<view class="list-content">
+									<view class="title u-line-2">{{ item.title }}</view>
+									<view class="format">
+										<text class="u-line-1">规格：</text>
+									</view>
+									<view class="coin">
+										<view class="coin-num u-line-1">¥{{ item.price / 100 || '0.00' }}</view>
+										<u-number-box
+											class="coin-number"
+											:value="1"
+											disabled-input
+											:input-width="64"
+											:input-height="44"
+										></u-number-box>
+									</view>
 								</view>
 							</view>
 						</view>
@@ -53,11 +61,17 @@
 			</view>
 		</AppScroll>
 		<view class="footer" @touchmove.stop>
-			<u-checkbox v-model="swipe.checked" shape="circle" active-color="#fa3534">
+			<u-checkbox
+				:value="checked"
+				name="active"
+				shape="circle"
+				active-color="#fa3534"
+				@change="props => swipe.onChange(props)"
+			>
 				<text style="font-size: 26rpx;">全选</text>
 			</u-checkbox>
 			<view class="footer-whole">
-				<text>合计:¥59.98</text>
+				<text>合计:¥{{ amount / 100 || '0.00' }}</text>
 			</view>
 			<u-button
 				shape="circle"
@@ -66,18 +80,29 @@
 				type="error"
 				:custom-style="{ padding: '0 40rpx', height: '60rpx' }"
 			>
-				<text>去结算(0)</text>
+				<text>去结算({{ total }})</text>
 			</u-button>
 		</view>
 	</view>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'Whee',
 	components: {
 		AppScroll
+	},
+	computed: {
+		...mapState({
+			dataSource: state => state.whee.whee
+		}),
+		...mapGetters({
+			checked: 'whee/checked',
+			amount: 'whee/amount',
+			total: 'whee/total'
+		})
 	},
 	data() {
 		return {
@@ -102,28 +127,19 @@ export default {
 				}
 			},
 			swipe: {
-				checked: false,
-				dataSource: Object.keys([...Array(10)]).map(i => ({
-					id: i,
-					title: '长安回望绣成堆，山顶千门次第开，一骑红尘妃子笑，无人知是荔枝来',
-					show: false,
-					checked: false
-				})),
 				options: [
-					{ text: '收藏', style: { backgroundColor: '#007aff' } },
-					{ text: '删除', style: { backgroundColor: '#dd524d' } }
+					{ text: '收藏', key: 'star', style: { backgroundColor: '#007aff' } },
+					{ text: '删除', key: 'delete', style: { backgroundColor: '#dd524d' } }
 				],
 				onOpen: index => {
-					this.swipe.dataSource[index].show = true
-					this.swipe.dataSource.map((val, idx) => {
-						if (index != idx) {
-							this.swipe.dataSource[idx].show = false
-						}
-					})
+					this.$store.commit('whee/onSwipe', { index })
 				},
-				onClick(index) {
-					const text = this.swipe.options[index].text
-					this.$u.toast(text)
+				onClick: (index, idx) => {
+					const proos = this.swipe.options[idx]
+					this.$store.commit('whee/onClick', { ...proos, index })
+				},
+				onChange: (props, index) => {
+					this.$store.commit('whee/onChange', { ...props, index })
 				}
 			}
 		}
@@ -172,6 +188,10 @@ export default {
 		display: flex;
 		padding: 20rpx;
 		align-items: center;
+		&-content {
+			display: flex;
+			align-items: center;
+		}
 	}
 	&-content {
 		width: 366rpx;

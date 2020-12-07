@@ -35,8 +35,12 @@ const mutations = {
 	//购物车左滑选项点击事件
 	onClick: (state, props) => {
 		const { index, key } = props
+		const { id } = state.whee[index]
 		if (key === 'delete') {
-			state.whee.splice(index, 1)
+			// state.whee.splice(index, 1)
+			// state.whee[index].show = false
+			console.log(state.whee[index])
+			state.whee = state.whee.map(v => ({ ...v, show: false })).filter(k => k.id != id)
 		} else {
 			uni.showToast({ title: `收藏第${index + 1}个` })
 		}

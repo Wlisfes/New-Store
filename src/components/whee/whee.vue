@@ -11,19 +11,17 @@
 			@refresh="scroll.onRefresh"
 			@restore="scroll.onRestore"
 		>
-			<view class="scroll-container">
-				<view class="list">
+			<view class="list">
+				<view class="list-item" v-for="(item, index) in dataSource" :key="index">
 					<u-swipe-action
 						:show="item.show"
 						:index="index"
 						btn-width="150"
-						v-for="(item, index) in dataSource"
-						:key="index"
 						:options="swipe.options"
 						@open="swipe.onOpen"
 						@click="swipe.onClick"
 					>
-						<view class="list-item">
+						<view class="list-item-box">
 							<u-checkbox
 								:value="item.checked"
 								name="item"
@@ -161,9 +159,6 @@ export default {
 		flex: 1;
 		overflow: hidden;
 		background-color: #f5f7fa;
-		&-container {
-			padding: 30rpx;
-		}
 	}
 	.footer {
 		height: 100rpx;
@@ -178,16 +173,30 @@ export default {
 	}
 }
 .list {
-	border-radius: 12rpx;
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
+	margin: 0 30rpx;
 	transform: translate3d(0, 0, 0);
 	&-item {
 		width: 690rpx;
-		display: flex;
-		padding: 20rpx;
-		align-items: center;
+		overflow: hidden;
+		background-color: #ffffff;
+		&:first-child {
+			margin-top: 30rpx;
+			border-top-left-radius: 12rpx;
+			border-top-right-radius: 12rpx;
+		}
+		&:last-child {
+			margin-bottom: 30rpx;
+			border-bottom-left-radius: 12rpx;
+			border-bottom-right-radius: 12rpx;
+		}
+		&-box {
+			padding: 20rpx;
+			display: flex;
+			align-items: center;
+		}
 		&-content {
 			display: flex;
 			align-items: center;
@@ -221,7 +230,7 @@ export default {
 				color: #fa3534;
 			}
 			&-number {
-				/deep/ .u-numberbox {
+				/deep/ .u-icon-minus {
 					width: 48rpx !important;
 				}
 			}

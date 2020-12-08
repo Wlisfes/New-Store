@@ -11,7 +11,7 @@
 			@restore="scroll.onRestore"
 		>
 			<view class="banner">
-				<swiper class="banner-swiper" indicator-dots autoplay>
+				<swiper class="banner-swiper" indicator-dots>
 					<swiper-item v-for="(k, index) in 8" :key="index">
 						<u-image width="100%" height="100%" src="/static/icons/1605967031503.png" mode="widthFix">
 							<u-loading slot="loading"></u-loading>
@@ -20,16 +20,17 @@
 				</swiper>
 				<view class="banner-footer">
 					<view class="context">
-						<view class="context-title u-line-1">应季鲜橙 3kg装 单果约200g</view>
+						<view class="context-title u-line-2">
+							<text
+								>应季鲜橙 3kg装 单果约200g 应季鲜橙 3kg装 单果约200g 应季鲜橙 3kg装 单果约200g 应季鲜橙
+								3kg装 单果约200g</text
+							>
+						</view>
 						<view class="context-sub">
 							<text class="amount">¥19.9</text>
 							<text class="amount-inverse">¥29.9</text>
 							<text class="month-sales">月销:3450</text>
 						</view>
-					</view>
-					<view class="star">
-						<u-icon name="heart" size="44" color="#99a0ad"></u-icon>
-						<text>收藏</text>
 					</view>
 				</view>
 			</view>
@@ -92,7 +93,6 @@ export default {
 		height: 750rpx;
 	}
 	&-footer {
-		height: 140rpx;
 		padding: 0 30rpx;
 		display: flex;
 		.star {
@@ -118,6 +118,7 @@ export default {
 		&-sub {
 			display: flex;
 			align-items: baseline;
+			margin: 10rpx 0;
 		}
 		.amount {
 			font-size: 36rpx;

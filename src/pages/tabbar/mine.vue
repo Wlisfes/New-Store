@@ -35,10 +35,11 @@
 					:font-size="32"
 					:show-line="false"
 					color="#141f33"
+					@click="() => navigateTo(`/pages/mine/order?current=${0}`)"
 				></u-section>
 			</view>
 			<view class="order-conster">
-				<view class="conster-item">
+				<view class="conster-item" @click="() => navigateTo(`/pages/mine/order?current=${1}`)">
 					<view class="relative">
 						<u-badge type="error" count="2" size="mini" :offset="[-8, -8]"> </u-badge>
 						<u-image width="80rpx" height="80rpx" src="/static/icons/1606580159010.png" mode="widthFix">
@@ -47,7 +48,7 @@
 					</view>
 					<text>待付款</text>
 				</view>
-				<view class="conster-item">
+				<view class="conster-item" @click="() => navigateTo(`/pages/mine/order?current=${2}`)">
 					<view class="relative">
 						<u-badge type="error" count="1" size="mini" :offset="[-8, -8]"> </u-badge>
 						<u-image width="80rpx" height="80rpx" src="/static/icons/1606580177237.png" mode="widthFix">
@@ -56,7 +57,7 @@
 					</view>
 					<text>待发货</text>
 				</view>
-				<view class="conster-item">
+				<view class="conster-item" @click="() => navigateTo(`/pages/mine/order?current=${3}`)">
 					<view class="relative">
 						<u-badge type="error" count="12" size="mini" :offset="[-8, -8]"> </u-badge>
 						<u-image width="80rpx" height="80rpx" src="/static/icons/1606580187289.png" mode="widthFix">
@@ -65,7 +66,7 @@
 					</view>
 					<text>待收货</text>
 				</view>
-				<view class="conster-item">
+				<view class="conster-item" @click="() => navigateTo(`/pages/mine/order?current=${4}`)">
 					<view class="relative">
 						<u-badge type="error" count="4" size="mini" :offset="[-8, -8]"> </u-badge>
 						<u-image width="80rpx" height="80rpx" src="/static/icons/1606580200743.png" mode="widthFix">

@@ -31,7 +31,7 @@
 			<view class="order-title">
 				<u-section
 					title="我的订单"
-					sub-title="全部"
+					sub-title="查看全部"
 					:font-size="32"
 					:show-line="false"
 					color="#141f33"

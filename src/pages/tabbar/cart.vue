@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import AppWhee from '@/components/whee/whee'
+import AppWhee from '@/components/common/whee'
 export default {
 	name: 'Cart',
 	components: {

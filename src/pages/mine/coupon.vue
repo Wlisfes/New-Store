@@ -20,11 +20,11 @@
 				@animationfinish="swiper.onAnimationFinish"
 			>
 				<swiper-item class="app-swiper-item">
-					<AppCoupon :custom-style="customStyle" :dataSource="dataSource"></AppCoupon>
+					<AppCoupon :custom-style="swiper.customStyle" :dataSource="dataSource"></AppCoupon>
 				</swiper-item>
 				<swiper-item class="app-swiper-item">
 					<AppCoupon
-						:custom-style="customStyle"
+						:custom-style="swiper.customStyle"
 						:dataSource="[1, 2, 3, 4, 5]"
 						:status="1"
 						lineColor="#C9CED6"
@@ -32,7 +32,7 @@
 				</swiper-item>
 				<swiper-item class="app-swiper-item">
 					<AppCoupon
-						:custom-style="customStyle"
+						:custom-style="swiper.customStyle"
 						:dataSource="[1, 2, 3, 4]"
 						:status="2"
 						lineColor="#C9CED6"
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import AppCoupon from '@/components/coupon/coupon'
+import AppCoupon from '@/components/common/coupon'
 export default {
 	name: 'Coupon',
 	components: {
@@ -52,9 +52,6 @@ export default {
 	},
 	data() {
 		return {
-			customStyle: {
-				height: '100%'
-			},
 			tabs: {
 				list: [{ name: '可使用' }, { name: '已使用' }, { name: '已过期' }],
 				current: 0,
@@ -65,6 +62,7 @@ export default {
 			},
 			swiper: {
 				current: 0,
+				customStyle: { height: '100%' },
 				onTransition: e => {
 					this.$refs.uTabs.setDx(e.detail.dx)
 				},

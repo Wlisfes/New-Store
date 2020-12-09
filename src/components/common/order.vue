@@ -54,7 +54,7 @@
 						<view :style="{ display: 'flex' }">
 							<button class="order-button" hover-class="none">加入购物车</button>
 							<button class="order-button" hover-class="none">取消订单</button>
-							<button class="order-button error" hover-class="none">付款</button>
+							<button class="order-button active" hover-class="none">付款</button>
 						</view>
 					</view>
 				</view>
@@ -219,7 +219,7 @@ export default {
 			&::after {
 				border-radius: 60rpx;
 			}
-			&.error {
+			&.active {
 				color: #fa3534;
 				&::after {
 					border-color: #fa3534;

@@ -116,9 +116,7 @@ export default {
 			user: state => state.user
 		})
 	},
-	onLoad() {
-		console.log(this.user)
-	},
+	onLoad() {},
 	//下拉刷新
 	async onPullDownRefresh() {
 		setTimeout(() => {

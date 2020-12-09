@@ -29,7 +29,7 @@
 						<u-image width="110rpx" height="110rpx" :src="k.picUrl" mode="widthFix">
 							<u-loading slot="loading"></u-loading>
 						</u-image>
-						<text class="classify-name">水果水果</text>
+						<text class="classify-name">{{ k.name }}</text>
 					</view>
 				</view>
 

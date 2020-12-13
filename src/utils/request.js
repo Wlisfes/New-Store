@@ -1,4 +1,6 @@
-export default function request({ baseUrl = '', url = '', data = {}, header = {}, method = 'GET' } = {}) {
+const BaseUrl = 'http://localhost:3004'
+
+export default function request({ baseUrl = BaseUrl, url = '', data = {}, header = {}, method = 'GET' } = {}) {
 	return new Promise((resolve, reject) => {
 		uni.request({
 			url: `${baseUrl}${url}`,

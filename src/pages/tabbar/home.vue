@@ -22,7 +22,7 @@
 					@click="onSearch"
 				></u-search>
 				<view class="app-swiper">
-					<u-swiper :list="banners" name="imageUrl"></u-swiper>
+					<u-swiper :list="banners" name="picUrl"></u-swiper>
 				</view>
 				<view class="classify">
 					<view class="classify-item" v-for="(k, index) in classify" :key="index">
@@ -44,24 +44,19 @@
 					<scroll-view class="hotcell-scroll" :scroll-x="true">
 						<view
 							class="hotcell-item"
-							v-for="(k, index) in 10"
+							v-for="(k, index) in hotcell"
 							:key="index"
 							@click="() => navigateTo('/pages/home/product')"
 						>
 							<view class="hotcell-image">
-								<u-image
-									width="100%"
-									height="100%"
-									src="/static/icons/1605967031503.png"
-									mode="widthFix"
-								>
+								<u-image width="100%" height="100%" :src="k.product.picUrl" mode="widthFix">
 									<u-loading slot="loading"></u-loading>
 								</u-image>
 							</view>
-							<view class="hotcell-name u-line-1">澳洲进口红肉橙</view>
+							<view class="hotcell-name u-line-1">{{ k.product.title }}</view>
 							<view class="hotcell-amount">
-								<text>¥19.9</text>
-								<text class="amount-inverse">¥29.9</text>
+								<text>{{ `¥${k.product.price}` }}</text>
+								<text class="amount-inverse">{{ `¥${k.product.suprice}` }}</text>
 							</view>
 						</view>
 					</scroll-view>
@@ -106,7 +101,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { banner } from '@/api/common'
+import { banner, source, hotwell } from '@/api/home'
 import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'Home',
@@ -115,25 +110,9 @@ export default {
 	},
 	data() {
 		return {
-			banners: [
-				{ imageUrl: '/static/icons/1606830628386.png' },
-				{ imageUrl: '/static/icons/1606830628386.png' },
-				{ imageUrl: '/static/icons/1606830628386.png' },
-				{ imageUrl: '/static/icons/1606830628386.png' },
-				{ imageUrl: '/static/icons/1606830628386.png' }
-			],
-			classify: [
-				{ id: 1, name: '水果', picUrl: '/static/icons/1605951261225.png' },
-				{ id: 2, name: '蔬菜', picUrl: '/static/icons/1605960766279.png' },
-				{ id: 3, name: '家禽', picUrl: '/static/icons/1605960791822.png' },
-				{ id: 4, name: '家畜', picUrl: '/static/icons/1605960804484.png' },
-				{ id: 5, name: '水产', picUrl: '/static/icons/1605960827823.png' },
-				{ id: 6, name: '蛋类', picUrl: '/static/icons/1605960843547.png' },
-				{ id: 7, name: '卤制品', picUrl: '/static/icons/1605960853385.png' },
-				{ id: 8, name: '饮品', picUrl: '/static/icons/1605960866246.png' },
-				{ id: 9, name: '粮油', picUrl: '/static/icons/1605960878178.png' },
-				{ id: 10, name: '熟食烘培', picUrl: '/static/icons/1605960888670.png' }
-			],
+			banners: [],
+			classify: [],
+			hotcell: [],
 			scroll: {
 				dataSource: Object.keys([...Array(20)]),
 				customStyle: { height: '100%' },
@@ -142,15 +121,16 @@ export default {
 				lowerThreshold: 500,
 				freshing: false,
 				triggered: false,
-				onRefresh: () => {
+				onRefresh: async () => {
 					console.log('刷新')
 					this.scroll.freshing = true
 					this.scroll.triggered = true
-					setTimeout(() => {
-						this.scroll.dataSource = Object.keys([...Array(20)])
-						this.scroll.triggered = false
-						this.scroll.freshing = false
-					}, 500)
+					await this.banner()
+					await this.source()
+					await this.hotwell()
+					this.scroll.dataSource = Object.keys([...Array(20)])
+					this.scroll.triggered = false
+					this.scroll.freshing = false
 				},
 				onRestore: () => {
 					console.log('刷新结束')
@@ -168,15 +148,34 @@ export default {
 		})
 	},
 	onLoad(e) {
-		// this.banner()
+		this.banner()
+		this.source()
+		this.hotwell()
 	},
 	onShareAppMessage() {},
 	methods: {
+		//banner轮播图
 		async banner() {
-			const response = await banner({ type: 'iphone' })
-			console.log(response)
+			const response = await banner()
 			if (response.code === 200) {
-				this.banners = response.banners
+				this.banners = response.data
+				return response
+			}
+		},
+		//分类列表
+		async source() {
+			const response = await source()
+			if (response.code === 200) {
+				this.classify = response.data
+				return response
+			}
+		},
+		//热销列表
+		async hotwell() {
+			const response = await hotwell()
+			if (response.code === 200) {
+				this.hotcell = response.data
+				return response
 			}
 		},
 		//路由跳转

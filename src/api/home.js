@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 //banner轮播图
-export const banner = params => {
+export function banner(params) {
 	return request({
 		url: `/v1/banner/list`,
 		data: params,
@@ -10,7 +10,7 @@ export const banner = params => {
 }
 
 //source分类
-export const source = params => {
+export function source(params) {
 	return request({
 		url: `/v1/source/list`,
 		data: params,
@@ -19,7 +19,7 @@ export const source = params => {
 }
 
 //热销
-export const hotwell = params => {
+export function hotwell(params) {
 	return request({
 		url: `/v1/hotwell/list`,
 		data: params,

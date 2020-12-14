@@ -7,7 +7,7 @@
 				:size="108"
 			></u-avatar>
 			<view class="user-name">
-				<text v-if="user.nickname">妖雨纯</text>
+				<text v-if="user.nickname">{{ user.nickname }}</text>
 				<button v-else class="u-reset-button login" open-type="getUserInfo" @getuserinfo="AuthUser">
 					<text>未登录</text>
 				</button>
@@ -128,10 +128,15 @@ export default {
 		navigateTo(url) {
 			uni.navigateTo({ url })
 		},
-		AuthUser(e) {
+		async AuthUser(e) {
 			const { errMsg, userInfo } = e.detail
 			if (errMsg === 'getUserInfo:ok') {
-				this.$store.dispatch('user/AuthUser', userInfo)
+				const response = await this.$store.dispatch('user/AuthUser', {
+					avatar: userInfo.avatarUrl,
+					nickname: userInfo.nickName
+				})
+
+				console.log(response)
 			}
 		}
 	}

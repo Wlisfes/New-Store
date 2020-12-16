@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import AppWhee from '@/components/common/whee'
 export default {
 	name: 'Cart',
@@ -14,7 +15,20 @@ export default {
 	data() {
 		return {}
 	},
-	onLoad() {},
+	computed: {
+		...mapState({
+			user: state => state.user,
+			uid: state => state.user.uid
+		})
+	},
+	watch: {
+		uid: {
+			handler() {
+				console.log(this.user)
+			},
+			immediate: true
+		}
+	},
 	methods: {}
 }
 </script>

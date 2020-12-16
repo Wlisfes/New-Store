@@ -24,7 +24,7 @@
 				<view class="app-swiper">
 					<u-swiper :list="banners" name="picUrl"></u-swiper>
 				</view>
-				<view class="classify">
+				<view class="classify" v-if="classify.length">
 					<view class="classify-item" v-for="(k, index) in classify" :key="index">
 						<u-image width="110rpx" height="110rpx" :src="k.picUrl" mode="widthFix">
 							<u-loading slot="loading"></u-loading>

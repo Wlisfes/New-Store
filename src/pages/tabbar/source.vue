@@ -69,6 +69,7 @@
 </template>
 
 <script>
+import { source } from '@/api/home'
 import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'Source',
@@ -80,18 +81,7 @@ export default {
 			form: {
 				current: 0,
 				sort: 1,
-				navs: [
-					{ id: 1, name: '水果', picUrl: '/static/icons/1605951261225.png' },
-					{ id: 2, name: '蔬菜', picUrl: '/static/icons/1605960766279.png' },
-					{ id: 3, name: '家禽', picUrl: '/static/icons/1605960791822.png' },
-					{ id: 4, name: '家畜', picUrl: '/static/icons/1605960804484.png' },
-					{ id: 5, name: '水产', picUrl: '/static/icons/1605960827823.png' },
-					{ id: 6, name: '蛋类', picUrl: '/static/icons/1605960843547.png' },
-					{ id: 7, name: '卤制品', picUrl: '/static/icons/1605960853385.png' },
-					{ id: 8, name: '饮品', picUrl: '/static/icons/1605960866246.png' },
-					{ id: 9, name: '粮油', picUrl: '/static/icons/1605960878178.png' },
-					{ id: 10, name: '熟食烘培', picUrl: '/static/icons/1605960888670.png' }
-				],
+				navs: [],
 				onSort: sort => {
 					this.form.sort = sort
 				}
@@ -124,7 +114,18 @@ export default {
 			}
 		}
 	},
+	onLoad() {
+		this.source()
+	},
 	methods: {
+		//分类列表
+		async source() {
+			const response = await source()
+			if (response.code === 200) {
+				this.form.navs = response.data
+				return response
+			}
+		},
 		//路由跳转
 		navigateTo(url) {
 			uni.navigateTo({ url })

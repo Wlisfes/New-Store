@@ -33,7 +33,7 @@
 					</view>
 				</view>
 
-				<view class="hotcell">
+				<view class="hotcell" v-if="hotcell.length">
 					<u-section
 						title="热销推荐"
 						sub-title="查看更多"
@@ -49,7 +49,13 @@
 							@click="() => navigateTo('/pages/home/product')"
 						>
 							<view class="hotcell-image">
-								<u-image width="100%" height="100%" :src="k.product.picUrl" mode="widthFix">
+								<u-image
+									width="100%"
+									height="100%"
+									:src="k.product.picUrl"
+									mode="widthFix"
+									:border-radius="6"
+								>
 									<u-loading slot="loading"></u-loading>
 								</u-image>
 							</view>
@@ -63,7 +69,7 @@
 				</view>
 				<view class="list">
 					<view class="list-title">
-						<u-section title="猜你喜欢" :font-size="32" color="#141f33" :right="false"></u-section>
+						<u-section title="新品推荐" :font-size="32" color="#141f33" :right="false"></u-section>
 					</view>
 					<view class="list-container">
 						<view
@@ -72,26 +78,20 @@
 							:key="index"
 							@click="() => navigateTo('/pages/home/product')"
 						>
-							<u-image
-								width="300rpx"
-								height="300rpx"
-								src="/static/icons/1605967031503.png"
-								mode="widthFix"
-							>
+							<u-image width="200rpx" height="200rpx" :src="k.picUrl" mode="widthFix" :border-radius="6">
 								<u-loading slot="loading"></u-loading>
 							</u-image>
-							<view class="card-name u-line-1">澳洲进口红肉橙澳洲进口红肉橙澳洲进口红肉橙</view>
-							<view class="card-footer">
-								<view class="amount">
-									<text>¥19.9</text>
-									<text class="amount-inverse">¥29.9</text>
-								</view>
-								<u-tag text="沆瀣一气" mode="dark" bg-color="#fa3534" color="#ffffff" size="mini" />
-							</view>
+							<view class=""></view>
 						</view>
 					</view>
+					<view class="app-loading" v-if="isMore">
+						<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
+					</view>
+					<view class="app-loading" v-if="isEmpty">
+						<u-divider>没有更多了</u-divider>
+					</view>
 				</view>
-				<view class="app-loading">
+				<view class="app-loading" v-if="isLoading">
 					<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
 				</view>
 			</view>
@@ -101,7 +101,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { banner, source, hotwell } from '@/api/home'
+import { banner, source, hotwell, news } from '@/api/home'
 import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'Home',
@@ -113,8 +113,13 @@ export default {
 			banners: [],
 			classify: [],
 			hotcell: [],
+
 			scroll: {
-				dataSource: Object.keys([...Array(20)]),
+				dataSource: [],
+				total: 0,
+				offset: 0,
+				limit: 5,
+				loading: true,
 				customStyle: { height: '100%' },
 				scrollY: true,
 				refresherEnabled: true,
@@ -125,10 +130,12 @@ export default {
 					console.log('刷新')
 					this.scroll.freshing = true
 					this.scroll.triggered = true
+					this.scroll.offset = 0
+					this.scroll.loading = true
 					await this.banner()
 					await this.source()
 					await this.hotwell()
-					this.scroll.dataSource = Object.keys([...Array(20)])
+					await this.news()
 					this.scroll.triggered = false
 					this.scroll.freshing = false
 				},
@@ -136,8 +143,12 @@ export default {
 					console.log('刷新结束')
 					this.scroll.triggered = 'restore'
 				},
-				onTolower: () => {
-					this.scroll.dataSource.push(...Object.keys([...Array(20)]))
+				onTolower: async () => {
+					const { offset, total, dataSource, loading } = this.scroll
+					if (offset < total && !loading) {
+						this.scroll.loading = true
+						await this.news(true)
+					}
 				}
 			}
 		}
@@ -145,12 +156,25 @@ export default {
 	computed: {
 		...mapState({
 			openid: state => state.openid
-		})
+		}),
+		//新品推荐首次加载动画
+		isLoading() {
+			return this.scroll.total === 0 && this.scroll.loading
+		},
+		//新品推荐没有更多数据了
+		isEmpty() {
+			return this.scroll.total === this.scroll.offset && !this.scroll.loading
+		},
+		//新品推荐是否还有更多加载
+		isMore() {
+			return this.scroll.offset < this.scroll.total
+		}
 	},
 	onLoad(e) {
 		this.banner()
 		this.source()
 		this.hotwell()
+		this.news()
 	},
 	onShareAppMessage() {},
 	methods: {
@@ -175,6 +199,24 @@ export default {
 			const response = await hotwell()
 			if (response.code === 200) {
 				this.hotcell = response.data
+				return response
+			}
+		},
+		//新品推荐
+		async news(concat) {
+			const { offset, limit, dataSource } = this.scroll
+			const response = await news({ offset, limit })
+			const { code, data } = response
+			if (code === 200) {
+				if (concat) {
+					this.scroll.offset = offset + data.list.length
+					this.scroll.dataSource = dataSource.concat(data.list)
+				} else {
+					this.scroll.offset = data.list.length
+					this.scroll.dataSource = data.list
+				}
+				this.scroll.total = data.total
+				this.scroll.loading = false
 				return response
 			}
 		},
@@ -208,14 +250,14 @@ export default {
 .classify {
 	display: flex;
 	flex-wrap: wrap;
-	margin: 36rpx 28rpx 0;
+	margin: 0 20rpx;
 	&-item {
 		width: 20%;
 		padding: 0 12rpx;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		margin-bottom: 36rpx;
+		margin-top: 36rpx;
 	}
 	&-name {
 		font-size: 26rpx;
@@ -225,10 +267,10 @@ export default {
 	}
 }
 .hotcell {
-	margin: 0 30rpx;
+	margin: 36rpx 30rpx 0;
 	&-scroll {
 		white-space: nowrap;
-		margin: 30rpx 0;
+		margin: 30rpx 0 0;
 	}
 	&-item {
 		display: inline-block;
@@ -267,46 +309,23 @@ export default {
 .list {
 	background-color: #ffffff;
 	&-title {
-		padding: 0 30rpx 30rpx;
+		margin: 30rpx 30rpx 0;
 	}
 	&-container {
-		display: flex;
-		flex-wrap: wrap;
-		padding: 0 15rpx 30rpx;
-		background-color: #f5f7fa;
+		padding-bottom: 30rpx;
 	}
 	&-item {
-		width: 330rpx;
-		margin: 30rpx 15rpx 0;
 		background-color: #ffffff;
 		border-radius: 12rpx;
 		display: flex;
-		flex-direction: column;
-		padding: 15rpx 15rpx 0;
-		box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.08);
-		.card-name {
-			font-size: 30rpx;
-			color: #141f33;
-			margin-top: 15rpx;
-		}
-		.card-footer {
-			height: 48rpx;
-			display: flex;
-			align-items: center;
-			font-size: 26rpx;
-			color: #fa3534;
-			margin-bottom: 20rpx;
-		}
-		.amount {
-			flex: 1;
-			display: flex;
-			align-items: center;
-		}
-		.amount-inverse {
-			font-size: 24rpx;
-			color: #99a0ad;
-			text-decoration: line-through;
-		}
+		align-items: center;
+		padding: 15rpx;
+		margin: 30rpx 30rpx 0;
+		box-shadow: 0rpx 0rpx 20rpx rgba(0, 0, 0, 0.15);
+	}
+	&-content {
+		flex: 1;
+		margin-left: 20rpx;
 	}
 }
 </style>

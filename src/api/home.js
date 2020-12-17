@@ -26,3 +26,12 @@ export function hotwell(params) {
 		method: 'GET'
 	})
 }
+
+//新品推荐
+export function news(params) {
+	return request({
+		url: `/v1/product/new`,
+		data: params,
+		method: 'GET'
+	})
+}

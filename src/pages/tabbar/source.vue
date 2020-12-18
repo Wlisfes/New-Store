@@ -8,99 +8,84 @@
 				:disabled="true"
 				:show-action="false"
 			></u-search>
-			<u-tabs
-				v-if="form.navs.length"
-				class="nav-tabs"
-				:list="form.navs"
-				:current="form.current"
-				:show-bar="false"
-				:height="56"
-				:font-size="28"
-				:bold="false"
-				:bar-height="0"
-				active-color="#ffffff"
-				:active-item-style="{ backgroundColor: '#ffb41f' }"
-				@change="form.onChange"
-			></u-tabs>
+			<view class="nav-tabs" v-if="form.navs.length">
+				<u-tabs
+					:list="form.navs"
+					:current="form.current"
+					:show-bar="false"
+					:height="56"
+					:font-size="28"
+					:bold="false"
+					:bar-height="0"
+					active-color="#ffffff"
+					:active-item-style="{ backgroundColor: '#ffb41f' }"
+					@change="form.onChange"
+				></u-tabs>
+			</view>
 			<view class="nav-sort" v-if="form.navs.length">
 				<text class="sort-name" :class="{ active: form.sort === 1 }" @click="form.onSort(1)">综合</text>
 				<text class="sort-name" :class="{ active: form.sort === 2 }" @click="form.onSort(2)">销量</text>
 				<text class="sort-name" :class="{ active: form.sort === 3 }" @click="form.onSort(3)">价格</text>
 			</view>
 		</view>
+
 		<view class="scroll">
-			<AppScroll
-				ref="scroll"
-				class="scroll-context"
-				:customStyle="scroll.customStyle"
-				:scroll-y="scroll.scrollY"
-				:refresher-enabled="scroll.refresherEnabled"
-				:lower-threshold="scroll.lowerThreshold"
-				:freshing="scroll.freshing"
-				:triggered="scroll.triggered"
-				@refresh="scroll.onRefresh"
-				@restore="scroll.onRestore"
-				@tolower="scroll.onTolower"
-			>
-				<view class="list">
-					<view
-						class="list-item"
-						v-for="k in scroll.dataSource"
-						:key="k.id"
-						@click="() => navigateTo(`/pages/home/product?id=${k.id}`)"
-					>
-						<u-image width="200rpx" height="200rpx" :src="k.picUrl" mode="widthFix" :border-radius="6">
-							<u-loading slot="loading"></u-loading>
-						</u-image>
-						<view class="list-content">
-							<view class="list-content-title u-line-2">{{ k.title }}</view>
-							<view :style="{ flex: 1 }"></view>
-							<view class="list-content-amount">
-								<text :style="{ fontWeight: 500 }">{{ `¥${k.price / 100 || '0.00'}` }}</text>
-								<text class="amount-inverse">{{ `¥${k.suprice / 100 || '0.00'}` }}</text>
-							</view>
-							<view class="list-content-footer">
-								<view class="sales">{{ `月销 ${k.sales} 笔` }}</view>
-								<block v-for="(item, index) in k.coupon" :key="item.id">
-									<u-tag
-										v-if="index < 2"
-										:text="`满${item.satisfy / 100}减${item.discount / 100}`"
-										style="margin: 0 4rpx;"
-										mode="light"
-										shape="circle"
-										size="mini"
-										type="error"
-									/>
-								</block>
-							</view>
+			<view class="list">
+				<view
+					class="list-item"
+					v-for="k in scroll.dataSource"
+					:key="k.id"
+					@click="() => navigateTo(`/pages/home/product?id=${k.id}`)"
+				>
+					<u-image width="200rpx" height="200rpx" :src="k.picUrl" mode="widthFix" :border-radius="6">
+						<u-loading slot="loading"></u-loading>
+					</u-image>
+					<view class="list-content">
+						<view class="list-content-title u-line-2">{{ k.title }}</view>
+						<view :style="{ flex: 1 }"></view>
+						<view class="list-content-amount">
+							<text :style="{ fontWeight: 500 }">{{ `¥${k.price / 100 || '0.00'}` }}</text>
+							<text class="amount-inverse">{{ `¥${k.suprice / 100 || '0.00'}` }}</text>
+						</view>
+						<view class="list-content-footer">
+							<view class="sales">{{ `月销 ${k.sales} 笔` }}</view>
+							<block v-for="(item, index) in k.coupon" :key="item.id">
+								<u-tag
+									v-if="index < 2"
+									:text="`满${item.satisfy / 100}减${item.discount / 100}`"
+									style="margin: 0 4rpx;"
+									mode="light"
+									shape="circle"
+									size="mini"
+									type="error"
+								/>
+							</block>
 						</view>
 					</view>
-					<view class="app-loading" v-if="isMore">
-						<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
-					</view>
-					<view class="app-loading" v-if="isEmpty">
-						<u-divider bg-color="#f5f7fa">没有更多了</u-divider>
-					</view>
 				</view>
-				<view class="app-loading" v-if="isLoading">
+				<view class="app-loading" v-if="isMore">
 					<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
 				</view>
-			</AppScroll>
+				<view class="app-loading" v-if="isEmpty">
+					<u-divider bg-color="#f5f7fa">没有更多了</u-divider>
+				</view>
+			</view>
+			<view class="app-loading" v-if="isLoading">
+				<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
+			</view>
 		</view>
+		<u-back-top :scroll-top="scroll.scrollTop"></u-back-top>
 	</view>
 </template>
 
 <script>
 import { source, sourceProduct } from '@/api/common'
-import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'Source',
-	components: {
-		AppScroll
-	},
 	data() {
 		return {
 			form: {
+				sticky: false,
 				current: 0,
 				sort: 1,
 				navs: [],
@@ -117,36 +102,15 @@ export default {
 				dataSource: [],
 				total: 0,
 				offset: 0,
-				limit: 6,
+				limit: 10,
 				loading: true,
-				customStyle: { height: '100%' },
-				scrollY: true,
-				refresherEnabled: true,
-				lowerThreshold: 500,
-				freshing: false,
-				triggered: false,
+				scrollTop: 0,
 				onRefresh: async () => {
-					console.log('刷新')
-					// this.$refs.scroll.backTop()
-					this.scroll.freshing = true
-					this.scroll.triggered = true
-					this.scroll.offset = 0
 					this.scroll.loading = true
-					await this.source()
+					this.scroll.offset = 0
+					this.scroll.total = 0
+					this.scroll.dataSource = []
 					await this.sourceProduct()
-					this.scroll.triggered = false
-					this.scroll.freshing = false
-				},
-				onRestore: () => {
-					console.log('刷新结束')
-					this.scroll.triggered = 'restore'
-				},
-				onTolower: async () => {
-					const { offset, total, dataSource, loading } = this.scroll
-					if (offset < total && !loading) {
-						this.scroll.loading = true
-						await this.sourceProduct(true)
-					}
 				}
 			}
 		}
@@ -154,7 +118,7 @@ export default {
 	computed: {
 		//新品推荐首次加载动画
 		isLoading() {
-			return this.scroll.total === 0 && this.scroll.loading && !this.scroll.freshing
+			return this.scroll.total === 0 && this.scroll.loading
 		},
 		//新品推荐没有更多数据了
 		isEmpty() {
@@ -168,6 +132,26 @@ export default {
 	async onLoad() {
 		await this.source()
 		await this.sourceProduct()
+	},
+	//滚动事件
+	onPageScroll(e) {
+		this.scroll.scrollTop = e.scrollTop
+	},
+	//下拉刷新
+	async onPullDownRefresh() {
+		this.scroll.loading = true
+		this.scroll.offset = 0
+		this.scroll.total = 0
+		await this.sourceProduct()
+		uni.stopPullDownRefresh()
+	},
+	//上拉加载
+	async onReachBottom() {
+		const { offset, total, dataSource, loading } = this.scroll
+		if (offset < total && !loading) {
+			this.scroll.loading = true
+			await this.sourceProduct(true)
+		}
 	},
 	methods: {
 		//分类列表
@@ -208,7 +192,6 @@ export default {
 
 <style lang="scss" scoped>
 .app-container {
-	height: 100vh;
 	.app-loading {
 		text-align: center;
 		padding: 32rpx;
@@ -217,8 +200,14 @@ export default {
 .source-header {
 	display: flex;
 	flex-direction: column;
+	position: sticky;
+	top: 0;
+	background-color: #ffffff;
+	z-index: 9;
 	.nav-tabs {
-		margin: 0 24rpx;
+		padding: 0 30rpx;
+		position: relative;
+		z-index: 9;
 		/deep/ .u-tab-item {
 			background-color: #f0f2f5;
 			margin-right: 24rpx;
@@ -246,6 +235,11 @@ export default {
 	flex: 1;
 	overflow: hidden;
 	background-color: #f5f7fa;
+	position: relative;
+	transition: margin 300ms;
+	&.active {
+		margin-top: 100rpx;
+	}
 	&-context {
 		height: 100%;
 		overflow: hidden;
@@ -253,6 +247,7 @@ export default {
 }
 .list {
 	background-color: #f5f7fa;
+	overflow: hidden;
 	&-item {
 		background-color: #ffffff;
 		border-radius: 12rpx;

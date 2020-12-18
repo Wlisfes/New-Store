@@ -1,27 +1,25 @@
+import { whee } from '@/api/whee'
+
 const state = {
-	whee: Object.keys([...Array(10)]).map(i => ({
-		id: i,
-		title: '长安回望绣成堆，山顶千门次第开，一骑红尘妃子笑，无人知是荔枝来',
-		show: false,
-		price: 2990,
-		checked: false
-	}))
+	list: []
 }
 
 const getters = {
 	checked: state => {
-		return (state.whee || []).every(k => k.checked) || false
+		return (state.list || []).every(k => k.checked) || false
 	},
 	amount: state => {
-		return state.whee.filter(k => k.checked).reduce((prev, curr) => prev + curr.price, 0)
+		return state.list.filter(k => k.checked).reduce((prev, curr) => prev + curr.price, 0)
 	},
 	total: state => {
-		return state.whee.filter(k => k.checked).length
+		return state.list.filter(k => k.checked).length
 	}
 }
 
 const mutations = {
-	setWhee: (state, props) => {},
+	setWhee: (state, list) => {
+		state.list = list
+	},
 	//购物车item左滑事件
 	onSwipe: (state, props) => {
 		const { index } = props
@@ -58,7 +56,16 @@ const mutations = {
 	}
 }
 
-const actions = {}
+const actions = {
+	//购物车列表数据
+	list: async ({ commit }) => {
+		const response = await whee()
+		if (response.code === 200) {
+			commit('setWhee', response.data)
+		}
+		return response
+	}
+}
 
 export default {
 	namespaced: true,

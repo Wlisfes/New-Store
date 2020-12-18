@@ -6,20 +6,28 @@
 		{
 			"path": "pages/tabbar/home",
 			"style": {
-				"navigationBarTitleText": "农贸生鲜"
+				"navigationBarTitleText": "农贸生鲜",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 500
 			}
 		},
 		{
 			"path": "pages/tabbar/source",
 			"style": {
-				"navigationBarTitleText": "分类"
+				"navigationBarTitleText": "分类",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 500,
+				"backgroundColorTop": "#ffffff",
+				"backgroundColorBottom": "#f5f7fa"
 			}
 		},
 		{
-			"path": "pages/tabbar/cart",
+			"path": "pages/tabbar/whee",
 			"style": {
 				"navigationBarTitleText": "购物车",
-				"navigationStyle": "default"
+				"enablePullDownRefresh": true,
+				"backgroundColorTop": "#f5f7fa",
+				"backgroundColorBottom": "#f5f7fa"
 			}
 		},
 		{
@@ -122,9 +130,9 @@
 				"text": "分类"
 			},
 			{
-				"pagePath": "pages/tabbar/cart",
-				"iconPath": "static/tabbar/cart.png",
-				"selectedIconPath": "static/tabbar/cart-current.png",
+				"pagePath": "pages/tabbar/whee",
+				"iconPath": "static/tabbar/whee.png",
+				"selectedIconPath": "static/tabbar/whee-current.png",
 				"text": "购物车"
 			},
 			{

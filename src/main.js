@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from '@/App'
 import store from '@/store'
 import uView from 'uview-ui'
+import bootstrap from '@/utils/bootstrap'
 import '@/utils/mixins'
 Vue.use(uView)
 
@@ -10,6 +11,9 @@ App.mpType = 'app'
 
 const app = new Vue({
 	store,
-	...App
+	...App,
+	created() {
+		bootstrap()
+	}
 })
 app.$mount()

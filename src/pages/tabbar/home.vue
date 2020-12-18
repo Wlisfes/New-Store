@@ -1,122 +1,100 @@
 <template>
-	<view class="app-container" @touchmove.stop>
-		<AppScroll
-			class="scroll"
-			:customStyle="scroll.customStyle"
-			:scroll-y="scroll.scrollY"
-			:refresher-enabled="scroll.refresherEnabled"
-			:lower-threshold="scroll.lowerThreshold"
-			:freshing="scroll.freshing"
-			:triggered="scroll.triggered"
-			@refresh="scroll.onRefresh"
-			@restore="scroll.onRestore"
-			@tolower="scroll.onTolower"
-		>
-			<view>
-				<u-search
-					placeholder="日照香炉生紫烟"
-					input-align="center"
-					margin="0 30rpx 30rpx"
-					:disabled="true"
-					:show-action="false"
-					@click="onSearch"
-				></u-search>
-				<view class="app-swiper">
-					<u-swiper :list="banners" name="picUrl" @click="onSwipeClick"></u-swiper>
-				</view>
-				<view class="classify" v-if="classify.length">
-					<view class="classify-item" v-for="(k, index) in classify" :key="index">
-						<u-image width="110rpx" height="110rpx" :src="k.picUrl" mode="widthFix">
+	<view class="app-container">
+		<u-search
+			placeholder="日照香炉生紫烟"
+			input-align="center"
+			margin="0 30rpx 30rpx"
+			:disabled="true"
+			:show-action="false"
+			@click="onSearch"
+		></u-search>
+		<view class="app-swiper">
+			<u-swiper :list="banners" name="picUrl" @click="onSwipeClick"></u-swiper>
+		</view>
+		<view class="classify" v-if="classify.length">
+			<view class="classify-item" v-for="(k, index) in classify" :key="index">
+				<u-image width="110rpx" height="110rpx" :src="k.picUrl" mode="widthFix">
+					<u-loading slot="loading"></u-loading>
+				</u-image>
+				<text class="classify-name">{{ k.name }}</text>
+			</view>
+		</view>
+		<view class="hotcell" v-if="hotcell.length">
+			<u-section
+				title="热销推荐"
+				sub-title="查看更多"
+				:font-size="32"
+				color="#141f33"
+				sub-color="#616b80"
+			></u-section>
+			<scroll-view class="hotcell-scroll" :scroll-x="true">
+				<view
+					class="hotcell-item"
+					v-for="(k, index) in hotcell"
+					:key="index"
+					@click="() => navigateTo(`/pages/home/product?id=${k.product.id}`)"
+				>
+					<view class="hotcell-image">
+						<u-image width="100%" height="100%" :src="k.product.picUrl" mode="widthFix" :border-radius="6">
 							<u-loading slot="loading"></u-loading>
 						</u-image>
-						<text class="classify-name">{{ k.name }}</text>
+					</view>
+					<view class="hotcell-name u-line-1">{{ k.product.title }}</view>
+					<view class="hotcell-amount">
+						<text>{{ `¥${k.product.price / 100 || '0.00'}` }}</text>
+						<text class="amount-inverse">{{ `¥${k.product.suprice / 100 || '0.00'}` }}</text>
 					</view>
 				</view>
-
-				<view class="hotcell" v-if="hotcell.length">
-					<u-section
-						title="热销推荐"
-						sub-title="查看更多"
-						:font-size="32"
-						color="#141f33"
-						sub-color="#616b80"
-					></u-section>
-					<scroll-view class="hotcell-scroll" :scroll-x="true">
-						<view
-							class="hotcell-item"
-							v-for="(k, index) in hotcell"
-							:key="index"
-							@click="() => navigateTo(`/pages/home/product?id=${k.product.id}`)"
-						>
-							<view class="hotcell-image">
-								<u-image
-									width="100%"
-									height="100%"
-									:src="k.product.picUrl"
-									mode="widthFix"
-									:border-radius="6"
-								>
-									<u-loading slot="loading"></u-loading>
-								</u-image>
-							</view>
-							<view class="hotcell-name u-line-1">{{ k.product.title }}</view>
-							<view class="hotcell-amount">
-								<text>{{ `¥${k.product.price / 100 || '0.00'}` }}</text>
-								<text class="amount-inverse">{{ `¥${k.product.suprice / 100 || '0.00'}` }}</text>
-							</view>
+			</scroll-view>
+		</view>
+		<view class="list">
+			<view class="list-title">
+				<u-section title="猜你喜欢" :font-size="32" color="#141f33" :right="false"></u-section>
+			</view>
+			<view class="list-container">
+				<view
+					class="list-item"
+					v-for="k in scroll.dataSource"
+					:key="k.id"
+					@click="() => navigateTo(`/pages/home/product?id=${k.id}`)"
+				>
+					<u-image width="200rpx" height="200rpx" :src="k.picUrl" mode="widthFix" :border-radius="6">
+						<u-loading slot="loading"></u-loading>
+					</u-image>
+					<view class="list-content">
+						<view class="list-content-title u-line-2">{{ k.title }}</view>
+						<view :style="{ flex: 1 }"></view>
+						<view class="list-content-amount">
+							<text :style="{ fontWeight: 500 }">{{ `¥${k.price / 100 || '0.00'}` }}</text>
+							<text class="amount-inverse">{{ `¥${k.suprice / 100 || '0.00'}` }}</text>
 						</view>
-					</scroll-view>
-				</view>
-				<view class="list">
-					<view class="list-title">
-						<u-section title="猜你喜欢" :font-size="32" color="#141f33" :right="false"></u-section>
-					</view>
-					<view class="list-container">
-						<view
-							class="list-item"
-							v-for="k in scroll.dataSource"
-							:key="k.id"
-							@click="() => navigateTo(`/pages/home/product?id=${k.id}`)"
-						>
-							<u-image width="200rpx" height="200rpx" :src="k.picUrl" mode="widthFix" :border-radius="6">
-								<u-loading slot="loading"></u-loading>
-							</u-image>
-							<view class="list-content">
-								<view class="list-content-title u-line-2">{{ k.title }}</view>
-								<view :style="{ flex: 1 }"></view>
-								<view class="list-content-amount">
-									<text :style="{ fontWeight: 500 }">{{ `¥${k.price / 100 || '0.00'}` }}</text>
-									<text class="amount-inverse">{{ `¥${k.suprice / 100 || '0.00'}` }}</text>
-								</view>
-								<view class="list-content-footer">
-									<view class="sales">{{ `月销 ${k.sales} 笔` }}</view>
-									<block v-for="(item, index) in k.coupon" :key="item.id">
-										<u-tag
-											v-if="index < 2"
-											:text="`满${item.satisfy / 100}减${item.discount / 100}`"
-											style="margin: 0 4rpx;"
-											mode="light"
-											shape="circle"
-											size="mini"
-											type="error"
-										/>
-									</block>
-								</view>
-							</view>
+						<view class="list-content-footer">
+							<view class="sales">{{ `月销 ${k.sales} 笔` }}</view>
+							<block v-for="(item, index) in k.coupon" :key="item.id">
+								<u-tag
+									v-if="index < 2"
+									:text="`满${item.satisfy / 100}减${item.discount / 100}`"
+									style="margin: 0 4rpx;"
+									mode="light"
+									shape="circle"
+									size="mini"
+									type="error"
+								/>
+							</block>
 						</view>
 					</view>
-					<view class="app-loading" v-if="isMore">
-						<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
-					</view>
-					<view class="app-loading" v-if="isEmpty">
-						<u-divider>没有更多了</u-divider>
-					</view>
-				</view>
-				<view class="app-loading" v-if="isLoading">
-					<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
 				</view>
 			</view>
-		</AppScroll>
+			<view class="app-loading" v-if="isMore">
+				<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
+			</view>
+			<view class="app-loading" v-if="isEmpty">
+				<u-divider>没有更多了</u-divider>
+			</view>
+		</view>
+		<view class="app-loading" v-if="isLoading">
+			<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
+		</view>
 	</view>
 </template>
 
@@ -124,12 +102,8 @@
 import { mapState } from 'vuex'
 import { banner, hotwell } from '@/api/home'
 import { source, productLove } from '@/api/common'
-import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'Home',
-	components: {
-		AppScroll
-	},
 	data() {
 		return {
 			banners: [],
@@ -140,35 +114,7 @@ export default {
 				total: 0,
 				offset: 0,
 				limit: 10,
-				loading: true,
-				customStyle: { height: '100%' },
-				scrollY: true,
-				refresherEnabled: true,
-				lowerThreshold: 500,
-				freshing: false,
-				triggered: false,
-				onRefresh: () => {
-					console.log('刷新')
-					this.scroll.freshing = true
-					this.scroll.triggered = true
-					this.scroll.offset = 0
-					this.scroll.loading = true
-					Promise.all([this.banner(), this.source(), this.hotwell(), this.productLove()]).finally(() => {
-						this.scroll.triggered = false
-						this.scroll.freshing = false
-					})
-				},
-				onRestore: () => {
-					console.log('刷新结束')
-					this.scroll.triggered = 'restore'
-				},
-				onTolower: async () => {
-					const { offset, total, dataSource, loading } = this.scroll
-					if (offset < total && !loading) {
-						this.scroll.loading = true
-						await this.productLove(true)
-					}
-				}
+				loading: true
 			}
 		}
 	},
@@ -194,6 +140,22 @@ export default {
 		this.source()
 		this.hotwell()
 		this.productLove()
+	},
+	//下拉刷新
+	onPullDownRefresh() {
+		this.scroll.offset = 0
+		this.scroll.loading = true
+		Promise.all([this.banner(), this.source(), this.hotwell(), this.productLove()]).finally(() => {
+			uni.stopPullDownRefresh()
+		})
+	},
+	//上拉加载
+	async onReachBottom() {
+		const { offset, total, dataSource, loading } = this.scroll
+		if (offset < total && !loading) {
+			this.scroll.loading = true
+			await this.productLove(true)
+		}
 	},
 	onShareAppMessage() {},
 	methods: {
@@ -250,19 +212,14 @@ export default {
 
 <style lang="scss" scoped>
 .app-container {
-	height: 100vh;
 	overflow: hidden;
 	.app-swiper {
 		margin: 0 30rpx;
 		position: relative;
 	}
-	.scroll {
-		flex: 1;
-		overflow: hidden;
-		.app-loading {
-			text-align: center;
-			padding: 32rpx;
-		}
+	.app-loading {
+		text-align: center;
+		padding: 32rpx;
 	}
 }
 

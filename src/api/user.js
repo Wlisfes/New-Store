@@ -8,3 +8,20 @@ export function register(params) {
 		method: 'POST'
 	})
 }
+
+//拉取用户信息
+export function findOne(params) {
+	if (params.uid) {
+		return request({
+			url: `/v1/user/one/uid`,
+			data: params,
+			method: 'GET'
+		})
+	} else if (params.openid) {
+		return request({
+			url: `/v1/user/one/openid`,
+			data: params,
+			method: 'GET'
+		})
+	}
+}

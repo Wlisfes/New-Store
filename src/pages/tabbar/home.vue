@@ -22,7 +22,7 @@
 					@click="onSearch"
 				></u-search>
 				<view class="app-swiper">
-					<u-swiper :list="banners" name="picUrl"></u-swiper>
+					<u-swiper :list="banners" name="picUrl" @click="onSwipeClick"></u-swiper>
 				</view>
 				<view class="classify" v-if="classify.length">
 					<view class="classify-item" v-for="(k, index) in classify" :key="index">
@@ -46,7 +46,7 @@
 							class="hotcell-item"
 							v-for="(k, index) in hotcell"
 							:key="index"
-							@click="() => navigateTo('/pages/home/product')"
+							@click="() => navigateTo(`/pages/home/product?id=${k.product.id}`)"
 						>
 							<view class="hotcell-image">
 								<u-image
@@ -61,27 +61,48 @@
 							</view>
 							<view class="hotcell-name u-line-1">{{ k.product.title }}</view>
 							<view class="hotcell-amount">
-								<text>{{ `¥${k.product.price}` }}</text>
-								<text class="amount-inverse">{{ `¥${k.product.suprice}` }}</text>
+								<text>{{ `¥${k.product.price / 100 || '0.00'}` }}</text>
+								<text class="amount-inverse">{{ `¥${k.product.suprice / 100 || '0.00'}` }}</text>
 							</view>
 						</view>
 					</scroll-view>
 				</view>
 				<view class="list">
 					<view class="list-title">
-						<u-section title="新品推荐" :font-size="32" color="#141f33" :right="false"></u-section>
+						<u-section title="猜你喜欢" :font-size="32" color="#141f33" :right="false"></u-section>
 					</view>
 					<view class="list-container">
 						<view
 							class="list-item"
-							v-for="(k, index) in scroll.dataSource"
-							:key="index"
-							@click="() => navigateTo('/pages/home/product')"
+							v-for="k in scroll.dataSource"
+							:key="k.id"
+							@click="() => navigateTo(`/pages/home/product?id=${k.id}`)"
 						>
 							<u-image width="200rpx" height="200rpx" :src="k.picUrl" mode="widthFix" :border-radius="6">
 								<u-loading slot="loading"></u-loading>
 							</u-image>
-							<view class=""></view>
+							<view class="list-content">
+								<view class="list-content-title u-line-2">{{ k.title }}</view>
+								<view :style="{ flex: 1 }"></view>
+								<view class="list-content-amount">
+									<text :style="{ fontWeight: 500 }">{{ `¥${k.price / 100 || '0.00'}` }}</text>
+									<text class="amount-inverse">{{ `¥${k.suprice / 100 || '0.00'}` }}</text>
+								</view>
+								<view class="list-content-footer">
+									<view class="sales">{{ `月销 ${k.sales} 笔` }}</view>
+									<block v-for="(item, index) in k.coupon" :key="item.id">
+										<u-tag
+											v-if="index < 2"
+											:text="`满${item.satisfy / 100}减${item.discount / 100}`"
+											style="margin: 0 4rpx;"
+											mode="light"
+											shape="circle"
+											size="mini"
+											type="error"
+										/>
+									</block>
+								</view>
+							</view>
 						</view>
 					</view>
 					<view class="app-loading" v-if="isMore">
@@ -101,7 +122,8 @@
 
 <script>
 import { mapState } from 'vuex'
-import { banner, source, hotwell, news } from '@/api/home'
+import { banner, hotwell } from '@/api/home'
+import { source, productLove } from '@/api/common'
 import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'Home',
@@ -113,12 +135,11 @@ export default {
 			banners: [],
 			classify: [],
 			hotcell: [],
-
 			scroll: {
 				dataSource: [],
 				total: 0,
 				offset: 0,
-				limit: 5,
+				limit: 10,
 				loading: true,
 				customStyle: { height: '100%' },
 				scrollY: true,
@@ -126,18 +147,16 @@ export default {
 				lowerThreshold: 500,
 				freshing: false,
 				triggered: false,
-				onRefresh: async () => {
+				onRefresh: () => {
 					console.log('刷新')
 					this.scroll.freshing = true
 					this.scroll.triggered = true
 					this.scroll.offset = 0
 					this.scroll.loading = true
-					await this.banner()
-					await this.source()
-					await this.hotwell()
-					await this.news()
-					this.scroll.triggered = false
-					this.scroll.freshing = false
+					Promise.all([this.banner(), this.source(), this.hotwell(), this.productLove()]).finally(() => {
+						this.scroll.triggered = false
+						this.scroll.freshing = false
+					})
 				},
 				onRestore: () => {
 					console.log('刷新结束')
@@ -147,7 +166,7 @@ export default {
 					const { offset, total, dataSource, loading } = this.scroll
 					if (offset < total && !loading) {
 						this.scroll.loading = true
-						await this.news(true)
+						await this.productLove(true)
 					}
 				}
 			}
@@ -174,7 +193,7 @@ export default {
 		this.banner()
 		this.source()
 		this.hotwell()
-		this.news()
+		this.productLove()
 	},
 	onShareAppMessage() {},
 	methods: {
@@ -203,9 +222,9 @@ export default {
 			}
 		},
 		//新品推荐
-		async news(concat) {
+		async productLove(concat) {
 			const { offset, limit, dataSource } = this.scroll
-			const response = await news({ offset, limit })
+			const response = await productLove({ offset, limit })
 			const { code, data } = response
 			if (code === 200) {
 				if (concat) {
@@ -220,9 +239,9 @@ export default {
 				return response
 			}
 		},
-		//路由跳转
-		navigateTo(url) {
-			uni.navigateTo({ url })
+		onSwipeClick(index) {
+			const { proid } = this.banners[index]
+			this.navigateTo(`/pages/home/product?id=${proid}`)
 		},
 		onSearch() {}
 	}
@@ -318,14 +337,40 @@ export default {
 		background-color: #ffffff;
 		border-radius: 12rpx;
 		display: flex;
-		align-items: center;
 		padding: 15rpx;
 		margin: 30rpx 30rpx 0;
 		box-shadow: 0rpx 0rpx 20rpx rgba(0, 0, 0, 0.15);
 	}
 	&-content {
 		flex: 1;
+		display: flex;
+		flex-direction: column;
 		margin-left: 20rpx;
+		&-title {
+			font-size: 30rpx;
+			color: #141f33;
+		}
+		&-amount {
+			display: flex;
+			align-items: center;
+			font-size: 30rpx;
+			color: #fa3534;
+			.amount-inverse {
+				font-size: 24rpx;
+				color: #99a0ad;
+				text-decoration: line-through;
+				margin-left: 12rpx;
+			}
+		}
+		&-footer {
+			display: flex;
+			align-items: center;
+			.sales {
+				font-size: 20rpx;
+				color: #99a0ad;
+				margin-right: 10rpx;
+			}
+		}
 	}
 }
 </style>

@@ -1,10 +1,9 @@
 import Vue from 'vue'
-import App from './App'
-import store from './store'
+import App from '@/App'
+import store from '@/store'
 import uView from 'uview-ui'
-
+import '@/utils/mixins'
 Vue.use(uView)
-// Vue
 
 Vue.config.productionTip = false
 App.mpType = 'app'

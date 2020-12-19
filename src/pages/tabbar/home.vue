@@ -69,7 +69,7 @@
 							<text class="amount-inverse">{{ `¥${k.suprice / 100 || '0.00'}` }}</text>
 						</view>
 						<view class="list-content-footer">
-							<view class="sales">{{ `月销 ${k.sales} 笔` }}</view>
+							<view class="sales">{{ `已销 ${k.sales} 笔` }}</view>
 							<block v-for="(item, index) in k.coupon" :key="item.id">
 								<u-tag
 									v-if="index < 2"

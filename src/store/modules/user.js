@@ -45,7 +45,10 @@ const actions = {
 						commit('setUser', data)
 						resolve(response)
 					} else {
-						uni.showToast({ title: message })
+						uni.showToast({
+							title: message,
+							icon: 'none'
+						})
 					}
 				}
 			})

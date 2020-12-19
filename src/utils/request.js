@@ -9,6 +9,7 @@ export default function request({ baseUrl = BaseUrl, url = '', data = {}, header
 			data,
 			header: {
 				'app-token': token,
+				'content-type': 'application/x-www-form-urlencoded',
 				...header
 			},
 			method,

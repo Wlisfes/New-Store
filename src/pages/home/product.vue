@@ -1,15 +1,6 @@
 <template>
-	<view class="app-container" @touchmove.stop>
-		<AppScroll
-			class="scroll"
-			:customStyle="scroll.customStyle"
-			:scroll-y="scroll.scrollY"
-			:refresher-enabled="scroll.refresherEnabled"
-			:freshing="scroll.freshing"
-			:triggered="scroll.triggered"
-			@refresh="scroll.onRefresh"
-			@restore="scroll.onRestore"
-		>
+	<view class="app-container">
+		<view class="container">
 			<view class="banner">
 				<swiper class="banner-swiper" indicator-dots>
 					<swiper-item v-for="(src, index) in product.banner" :key="index">
@@ -36,31 +27,25 @@
 				<view class="content-title">
 					<u-section title="商品详情" :font-size="32" color="#141f33" :right="false"></u-section>
 				</view>
-				<view>
-					<u-image
-						v-for="(src, index) in product.content"
-						:key="index"
-						:src="src"
-						width="100%"
-						mode="widthFix"
-					>
+				<view class="content-image">
+					<u-image v-for="(src, index) in product.content" :key="index" :src="src" mode="widthFix">
 						<u-loading slot="loading"></u-loading>
 					</u-image>
 				</view>
 			</view>
-		</AppScroll>
-		<AppFooter></AppFooter>
+		</view>
+		<view class="app-footer">
+			<AppFooter></AppFooter>
+		</view>
 	</view>
 </template>
 
 <script>
 import { productInfo } from '@/api/common'
-import AppScroll from '@/components/common/scroll'
 import AppFooter from '@/components/common/footer'
 export default {
 	name: 'Product',
 	components: {
-		AppScroll,
 		AppFooter
 	},
 	data() {
@@ -72,30 +57,16 @@ export default {
 				price: 0,
 				suprice: 0,
 				sales: 0
-			},
-			scroll: {
-				customStyle: { height: '100%' },
-				scrollY: true,
-				refresherEnabled: true,
-				freshing: false,
-				triggered: false,
-				onRefresh: async () => {
-					console.log('刷新')
-					this.scroll.freshing = true
-					this.scroll.triggered = true
-					await this.productInfo()
-					this.scroll.triggered = false
-					this.scroll.freshing = false
-				},
-				onRestore: () => {
-					console.log('刷新结束')
-					this.scroll.triggered = 'restore'
-				}
 			}
 		}
 	},
 	onLoad() {
 		this.productInfo()
+	},
+	//下拉刷新
+	async onPullDownRefresh() {
+		await this.productInfo()
+		uni.stopPullDownRefresh()
 	},
 	methods: {
 		//商品详情
@@ -119,11 +90,22 @@ export default {
 
 <style lang="scss" scoped>
 .app-container {
-	height: 100vh;
-	overflow: hidden;
-	.scroll {
+	padding-bottom: 140rpx;
+	.container {
 		flex: 1;
-		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		padding-bottom: constant(safe-area-inset-bottomm);
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+	.app-footer {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #ffffff;
+		padding-bottom: constant(safe-area-inset-bottomm);
+		padding-bottom: env(safe-area-inset-bottom);
 	}
 }
 .banner {
@@ -180,6 +162,14 @@ export default {
 .content {
 	&-title {
 		margin: 30rpx;
+	}
+	&-image {
+		display: flex;
+		flex-direction: column;
+		/deep/ image {
+			width: 100%;
+			display: block;
+		}
 	}
 }
 </style>

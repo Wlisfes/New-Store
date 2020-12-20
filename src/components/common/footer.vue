@@ -47,8 +47,6 @@ export default {
 	display: flex;
 	align-items: center;
 	background-color: #ffffff;
-	padding-bottom: constant(safe-area-inset-bottomm);
-	padding-bottom: env(safe-area-inset-bottom);
 	position: relative;
 	.app-button {
 		flex: 1;

@@ -111,6 +111,8 @@
 				@click="id => navigateTo(`/pages/home/product?id=${id}`)"
 			></AppList>
 		</view>
+
+		<u-back-top :scroll-top="scroll.scrollTop"></u-back-top>
 	</view>
 </template>
 
@@ -136,7 +138,8 @@ export default {
 				total: 0,
 				offset: 0,
 				limit: 10,
-				loading: true
+				loading: true,
+				scrollTop: 0
 			},
 			swipe: {
 				options: [
@@ -178,6 +181,10 @@ export default {
 			},
 			immediate: true
 		}
+	},
+	//滚动事件
+	onPageScroll(e) {
+		this.scroll.scrollTop = e.scrollTop
 	},
 	//下拉刷新
 	async onPullDownRefresh() {

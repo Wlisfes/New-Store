@@ -95,6 +95,7 @@
 		<view class="app-loading" v-if="isLoading">
 			<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
 		</view>
+		<u-back-top :scroll-top="scroll.scrollTop"></u-back-top>
 	</view>
 </template>
 
@@ -114,7 +115,8 @@ export default {
 				total: 0,
 				offset: 0,
 				limit: 10,
-				loading: true
+				loading: true,
+				scrollTop: 0
 			}
 		}
 	},
@@ -140,6 +142,10 @@ export default {
 		this.source()
 		this.hotwell()
 		this.productLove()
+	},
+	//滚动事件
+	onPageScroll(e) {
+		this.scroll.scrollTop = e.scrollTop
 	},
 	//下拉刷新
 	onPullDownRefresh() {

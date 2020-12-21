@@ -7,28 +7,82 @@
 			</button>
 		</view>
 		<view class="app-item u-border-bottom u-border-right">
-			<u-badge :count="100" type="error" size="mini" :offset="[5, 2]"></u-badge>
-			<u-icon name="shopping-cart" :size="38" color="#616b80"></u-icon>
-			<view class="text u-line-1">购物车</view>
+			<block v-if="uid">
+				<view class="app-item-box" @click="() => onClick(2)">
+					<u-badge :count="dataSource.length" type="error" size="mini" :offset="[5, 2]"></u-badge>
+					<u-icon name="shopping-cart" :size="38" color="#616b80"></u-icon>
+					<view class="text u-line-1">购物车</view>
+				</view>
+			</block>
+			<block v-else>
+				<button class="u-reset-button" open-type="getUserInfo" @getuserinfo="e => AuthUser(e, 2)">
+					<u-badge :count="dataSource.length" type="error" size="mini" :offset="[5, 2]"></u-badge>
+					<u-icon name="shopping-cart" :size="38" color="#616b80"></u-icon>
+					<view class="text u-line-1">购物车</view>
+				</button>
+			</block>
 		</view>
 		<view class="app-item u-border-bottom u-border-right">
-			<u-icon name="star" :size="38" color="#616b80"></u-icon>
-			<view class="text u-line-1">收藏</view>
+			<block v-if="uid">
+				<view class="app-item-box" @click="() => onClick(3)">
+					<u-icon name="star" :size="38" color="#616b80"></u-icon>
+					<view class="text u-line-1">收藏</view>
+				</view>
+			</block>
+			<block v-else>
+				<button class="u-reset-button" open-type="getUserInfo" @getuserinfo="e => AuthUser(e, 3)">
+					<u-icon name="star" :size="38" color="#616b80"></u-icon>
+					<view class="text u-line-1">收藏</view>
+				</button>
+			</block>
 		</view>
 		<view class="app-button u-border-bottom" :style="{ paddingLeft: '20rpx' }">
-			<button class="u-reset-button sub-bottom" :style="{ backgroundColor: app.error }">
-				<text>加入购物车</text>
-			</button>
+			<block v-if="uid">
+				<button
+					class="u-reset-button sub-bottom"
+					:style="{ backgroundColor: app.error }"
+					@click="() => onClick(4)"
+				>
+					<text>加入购物车</text>
+				</button>
+			</block>
+			<block v-else>
+				<button
+					class="u-reset-button sub-bottom"
+					:style="{ backgroundColor: app.error }"
+					open-type="getUserInfo"
+					@getuserinfo="e => AuthUser(3, 4)"
+				>
+					<text>加入购物车</text>
+				</button>
+			</block>
 		</view>
 		<view class="app-button u-border-bottom" :style="{ paddingRight: '20rpx' }">
-			<button class="u-reset-button sub-bottom" :style="{ backgroundColor: app.warning }">
-				<text>立即购买</text>
-			</button>
+			<block v-if="uid">
+				<button
+					class="u-reset-button sub-bottom"
+					:style="{ backgroundColor: app.warning }"
+					@click="() => onClick(5)"
+				>
+					<text>立即购买</text>
+				</button>
+			</block>
+			<block v-else>
+				<button
+					class="u-reset-button sub-bottom"
+					:style="{ backgroundColor: app.warning }"
+					open-type="getUserInfo"
+					@getuserinfo="e => AuthUser(e, 5)"
+				>
+					<text>立即购买</text>
+				</button>
+			</block>
 		</view>
 	</view>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
 	name: 'AppFooter',
 	data() {
@@ -37,6 +91,30 @@ export default {
 				warning: '#ff9900',
 				error: '#fa3534'
 			}
+		}
+	},
+	computed: {
+		...mapState({
+			uid: state => state.user.uid,
+			dataSource: state => state.whee.list
+		})
+	},
+	methods: {
+		//授权登录
+		async AuthUser(e, sumber) {
+			const { errMsg, userInfo } = e.detail
+			if (errMsg === 'getUserInfo:ok') {
+				const { code } = await this.$store.dispatch('user/AuthUser', {
+					avatar: userInfo.avatarUrl,
+					nickname: userInfo.nickName
+				})
+				if (code === 200) {
+					this.onClick(sumber)
+				}
+			}
+		},
+		onClick(sumber) {
+			this.$emit('click', sumber)
 		}
 	}
 }
@@ -74,6 +152,14 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		&-box {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
 		.u-reset-button {
 			margin: 0;
 			width: 100%;

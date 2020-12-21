@@ -3,7 +3,7 @@
 		<u-search
 			placeholder="日照香炉生紫烟"
 			input-align="center"
-			margin="0 30rpx 30rpx"
+			margin="0 20rpx 30rpx"
 			:disabled="true"
 			:show-action="false"
 			@click="onSearch"
@@ -13,7 +13,7 @@
 		</view>
 		<view class="classify" v-if="classify.length">
 			<view class="classify-item" v-for="(k, index) in classify" :key="index">
-				<u-image width="110rpx" height="110rpx" :src="k.picUrl" mode="widthFix">
+				<u-image width="118rpx" height="118rpx" :src="k.picUrl" mode="widthFix">
 					<u-loading slot="loading"></u-loading>
 				</u-image>
 				<text class="classify-name">{{ k.name }}</text>
@@ -220,7 +220,7 @@ export default {
 .app-container {
 	overflow: hidden;
 	.app-swiper {
-		margin: 0 30rpx;
+		margin: 0 20rpx;
 		position: relative;
 	}
 	.app-loading {
@@ -249,23 +249,23 @@ export default {
 	}
 }
 .hotcell {
-	margin: 36rpx 30rpx 0;
+	margin: 36rpx 20.5rpx 0;
 	&-scroll {
 		white-space: nowrap;
 		margin: 30rpx 0 0;
 	}
 	&-item {
 		display: inline-block;
-		width: 240rpx;
-		padding-right: 30rpx;
+		width: 243rpx;
+		padding-right: 20rpx;
 		&:last-child {
-			width: 210rpx;
+			width: 223rpx;
 			padding-right: 0;
 		}
 	}
 	&-image {
-		width: 210rpx;
-		height: 210rpx;
+		width: 223rpx;
+		height: 223rpx;
 		background-color: #f5f7fa;
 		border-radius: 8rpx;
 	}
@@ -291,7 +291,7 @@ export default {
 .list {
 	background-color: #ffffff;
 	&-title {
-		margin: 30rpx 30rpx 0;
+		margin: 30rpx 20rpx 0;
 	}
 	&-container {
 		padding-bottom: 30rpx;
@@ -301,7 +301,7 @@ export default {
 		border-radius: 12rpx;
 		display: flex;
 		padding: 15rpx;
-		margin: 30rpx 30rpx 0;
+		margin: 30rpx 20rpx 0;
 		box-shadow: 0rpx 0rpx 20rpx rgba(0, 0, 0, 0.15);
 	}
 	&-content {

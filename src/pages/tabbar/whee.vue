@@ -29,7 +29,7 @@
 								<view class="list-content">
 									<view class="title u-line-2">{{ item.product.title }}</view>
 									<view class="format">
-										<text class="u-line-1">规格：</text>
+										<text class="u-line-1">规格：{{ item.sku.skuname }}</text>
 									</view>
 									<view class="coin">
 										<view class="coin-num u-line-1">¥{{ item.sku.price / 100 || '0.00' }}</view>

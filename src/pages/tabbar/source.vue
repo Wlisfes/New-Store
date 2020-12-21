@@ -4,7 +4,7 @@
 			<u-search
 				placeholder="日照香炉生紫烟"
 				input-align="center"
-				margin="0 30rpx 30rpx"
+				margin="0 20rpx 30rpx"
 				:disabled="true"
 				:show-action="false"
 			></u-search>
@@ -205,7 +205,7 @@ export default {
 	background-color: #ffffff;
 	z-index: 9;
 	.nav-tabs {
-		padding: 0 30rpx;
+		padding: 0 20rpx;
 		position: relative;
 		z-index: 9;
 		/deep/ .u-tab-item {
@@ -223,7 +223,7 @@ export default {
 		line-height: 80rpx;
 		padding: 0 12rpx;
 		.sort-name {
-			padding: 0 24rpx;
+			padding: 0 16px;
 			transition: all 300ms;
 			&.active {
 				color: #ffb41f;
@@ -253,7 +253,7 @@ export default {
 		border-radius: 12rpx;
 		display: flex;
 		padding: 15rpx;
-		margin: 30rpx 30rpx 0;
+		margin: 30rpx 20rpx 0;
 		box-shadow: 0rpx 0rpx 20rpx rgba(0, 0, 0, 0.15);
 	}
 	&-content {

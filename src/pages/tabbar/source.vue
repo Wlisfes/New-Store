@@ -35,7 +35,7 @@
 					class="list-item"
 					v-for="k in scroll.dataSource"
 					:key="k.id"
-					@click="() => navigateTo(`/pages/home/product?id=${k.id}`)"
+					@click="() => navigateTo(`/pages/common/product?id=${k.id}`)"
 				>
 					<u-image width="200rpx" height="200rpx" :src="k.picUrl" mode="widthFix" :border-radius="6">
 						<u-loading slot="loading"></u-loading>

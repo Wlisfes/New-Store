@@ -32,7 +32,7 @@
 					class="hotcell-item"
 					v-for="(k, index) in hotcell"
 					:key="index"
-					@click="() => navigateTo(`/pages/home/product?id=${k.product.id}`)"
+					@click="() => navigateTo(`/pages/common/product?id=${k.product.id}`)"
 				>
 					<view class="hotcell-image">
 						<u-image width="100%" height="100%" :src="k.product.picUrl" mode="widthFix" :border-radius="6">
@@ -56,7 +56,7 @@
 					class="list-item"
 					v-for="k in scroll.dataSource"
 					:key="k.id"
-					@click="() => navigateTo(`/pages/home/product?id=${k.id}`)"
+					@click="() => navigateTo(`/pages/common/product?id=${k.id}`)"
 				>
 					<u-image width="200rpx" height="200rpx" :src="k.picUrl" mode="widthFix" :border-radius="6">
 						<u-loading slot="loading"></u-loading>
@@ -209,7 +209,7 @@ export default {
 		},
 		onSwipeClick(index) {
 			const { proid } = this.banners[index]
-			this.navigateTo(`/pages/home/product?id=${proid}`)
+			this.navigateTo(`/pages/common/product?id=${proid}`)
 		},
 		onSearch() {}
 	}

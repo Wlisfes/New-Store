@@ -26,6 +26,7 @@
 			"style": {
 				"navigationBarTitleText": "购物车",
 				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 500,
 				"backgroundColorTop": "#f5f7fa",
 				"backgroundColorBottom": "#f5f7fa"
 			}
@@ -98,7 +99,7 @@
 			}
 		},
 		{
-			"path": "pages/home/product",
+			"path": "pages/common/product",
 			"style": {
 				"navigationBarTitleText": "商品详情",
 				"enablePullDownRefresh": true

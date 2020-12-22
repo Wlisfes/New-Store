@@ -35,33 +35,62 @@
 			</view>
 		</view>
 		<view class="app-footer">
-			<AppFooter></AppFooter>
+			<AppFooter @click="onClick"></AppFooter>
 		</view>
+		<AppSku
+			:visible.sync="sku.visible"
+			:title="product.title"
+			:picUrl="product.picUrl"
+			:sku="product.sku"
+			:format="product.format"
+			:sumber="sku.sumber"
+			@submit="onSubmit"
+		></AppSku>
+		<u-back-top :scroll-top="product.scrollTop"></u-back-top>
 	</view>
 </template>
 
 <script>
 import { productInfo } from '@/api/common'
+import { createWhee } from '@/api/whee'
 import AppFooter from '@/components/common/footer'
+import AppSku from '@/components/common/sku'
 export default {
 	name: 'Product',
 	components: {
-		AppFooter
+		AppFooter,
+		AppSku
 	},
 	data() {
 		return {
 			product: {
 				banner: [],
 				content: [],
+				sku: [],
+				format: [],
+				star: null,
 				title: '',
+				picUrl: '',
 				price: 0,
 				suprice: 0,
-				sales: 0
+				sales: 0,
+				scrollTop: 0
+			},
+			sku: {
+				visible: false,
+				sumber: 0,
+				onClick: () => {
+					this.sku.visible = true
+				}
 			}
 		}
 	},
 	onLoad() {
 		this.productInfo()
+	},
+	//滚动事件
+	onPageScroll(e) {
+		this.product.scrollTop = e.scrollTop
 	},
 	//下拉刷新
 	async onPullDownRefresh() {
@@ -77,12 +106,46 @@ export default {
 			if (code === 200) {
 				this.product.banner = data.banner
 				this.product.content = data.content
+				this.product.sku = data.sku
+				this.product.format = data.format
+				this.product.star = data.star
 				this.product.title = data.title
+				this.product.picUrl = data.picUrl
 				this.product.price = data.price
 				this.product.suprice = data.suprice
 				this.product.sales = data.sales
 			}
 			return response
+		},
+		//底部菜单点击事件
+		onClick(sumber) {
+			if ([4, 5].includes(sumber)) {
+				this.sku.sumber = sumber
+				this.sku.visible = true
+			}
+		},
+		async onSubmit(ops) {
+			console.log(ops)
+			if (ops.sumber === 4) {
+				uni.showLoading({ title: '加载中...' })
+				const { id } = this.useOptions()
+				const response = await createWhee({
+					id,
+					sku: ops.skukey,
+					some: ops.some
+				})
+				const { code, data, message } = response
+				if (code === 200) {
+					uni.showToast({
+						title: data,
+						success: () => {
+							this.sku.visible = false
+						}
+					})
+				} else {
+					uni.showToast({ title: message, icon: 'none' })
+				}
+			}
 		}
 	}
 }

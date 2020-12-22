@@ -19,13 +19,19 @@
 								active-color="#fa3534"
 								@change="props => swipe.onChange(props, index)"
 							></u-checkbox>
-							<view class="list-item-content" @click="() => navigateTo('/pages/home/product')">
+							<view
+								class="list-item-content"
+								@click="() => navigateTo(`/pages/common/product?id=${item.product.id}`)"
+							>
 								<u-image
 									width="200rpx"
 									height="200rpx"
-									src="/static/icons/1605967031503.png"
 									mode="widthFix"
-								></u-image>
+									:src="item.product.picUrl"
+									:border-radius="6"
+								>
+									<u-loading slot="loading"></u-loading>
+								</u-image>
 								<view class="list-content">
 									<view class="title u-line-2">{{ item.product.title }}</view>
 									<view class="format">
@@ -108,7 +114,7 @@
 				:total="scroll.total"
 				:offset="scroll.offset"
 				:loading="scroll.loading"
-				@click="id => navigateTo(`/pages/home/product?id=${id}`)"
+				@click="id => navigateTo(`/pages/common/product?id=${id}`)"
 			></AppList>
 		</view>
 

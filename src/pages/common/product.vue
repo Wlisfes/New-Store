@@ -52,7 +52,7 @@
 
 <script>
 import { productInfo } from '@/api/common'
-import { createWhee } from '@/api/whee'
+import { createWhee, createCacheWhee } from '@/api/whee'
 import AppFooter from '@/components/common/footer'
 import AppSku from '@/components/common/sku'
 export default {
@@ -124,17 +124,14 @@ export default {
 				this.sku.visible = true
 			}
 		},
+		//suk组件确定事件
 		async onSubmit(ops) {
-			console.log(ops)
-			if (ops.sumber === 4) {
-				uni.showLoading({ title: '加载中...' })
-				const { id } = this.useOptions()
-				const response = await createWhee({
-					id,
-					sku: ops.skukey,
-					some: ops.some
-				})
-				const { code, data, message } = response
+			const { sumber, sku, some } = ops
+			const { id } = this.useOptions()
+			uni.showLoading({ title: '加载中...' })
+			if (sumber === 4) {
+				//加入购物车
+				const { code, data, message } = await createWhee({ id, some, sku: sku.id })
 				if (code === 200) {
 					uni.showToast({
 						title: data,
@@ -142,6 +139,16 @@ export default {
 							this.sku.visible = false
 						}
 					})
+				} else {
+					uni.showToast({ title: message, icon: 'none' })
+				}
+			} else if (sumber === 5) {
+				//立即购买
+				const { code, data, message } = await createCacheWhee({ id, some, sku: sku.id })
+				if (code === 200) {
+					uni.hideLoading()
+					this.sku.visible = false
+					this.navigateTo(`/pages/common/under?ids=${JSON.stringify([data.id])}`)
 				} else {
 					uni.showToast({ title: message, icon: 'none' })
 				}

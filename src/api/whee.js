@@ -9,10 +9,28 @@ export function whee(params) {
 	})
 }
 
+//批量获取购物车
+export function wheeAnd(params) {
+	return request({
+		url: `/v1/whee/ids`,
+		data: params,
+		method: 'POST'
+	})
+}
+
 //加入购物车
 export function createWhee(params) {
 	return request({
 		url: `/v1/whee/create`,
+		data: params,
+		method: 'POST'
+	})
+}
+
+//加入购物车缓存
+export function createCacheWhee(params) {
+	return request({
+		url: `/v1/whee/create/cache`,
 		data: params,
 		method: 'POST'
 	})

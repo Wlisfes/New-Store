@@ -99,7 +99,8 @@
 					size="medium"
 					:hair-line="false"
 					type="error"
-					:custom-style="{ padding: '0 40rpx', height: '60rpx' }"
+					:custom-style="{ padding: '0 48rpx', height: '68rpx' }"
+					@click="onSubmit"
 				>
 					<text>去结算</text>
 				</u-button>
@@ -220,6 +221,9 @@ export default {
 				this.scroll.loading = false
 			}
 			return response
+		},
+		onSubmit() {
+			this.navigateTo(`/pages/common/under?ids=${JSON.stringify([1, 2, 3, 4, 5, 6])}`)
 		}
 	}
 }

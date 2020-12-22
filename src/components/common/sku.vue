@@ -126,8 +126,9 @@ export default {
 				uni.showToast({ title: '请选择规格', icon: 'none' })
 			} else {
 				const skukey = this.initFormat.map(k => k.active).join('-')
+				const sku = this.sku.find(k => k.skukey === skukey)
 				this.$emit('submit', {
-					skukey,
+					sku: sku,
 					some: this.some,
 					sumber: this.sumber
 				})

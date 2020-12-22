@@ -104,6 +104,17 @@
 				"navigationBarTitleText": "商品详情",
 				"enablePullDownRefresh": true
 			}
+		},
+		{
+			"path": "pages/common/under",
+			"style": {
+				"navigationBarTitleText": "确认订单",
+				"navigationBarBackgroundColor": "#FFB41F",
+				"navigationBarTextStyle": "white",
+				"backgroundColorTop": "#ffb41f",
+				"backgroundColorBottom": "#f5f7fa",
+				"enablePullDownRefresh": true
+			}
 		}
 	],
 	"globalStyle": {

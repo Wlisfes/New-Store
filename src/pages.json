@@ -115,6 +115,24 @@
 				"backgroundColorBottom": "#f5f7fa",
 				"enablePullDownRefresh": true
 			}
+		},
+		{
+			"path": "pages/common/coupon",
+			"style": {
+				"navigationBarTitleText": "优惠劵",
+				"onReachBottomDistance": 500,
+				"enablePullDownRefresh": true,
+				"backgroundColorTop": "#f5f7fa",
+				"backgroundColorBottom": "#f5f7fa"
+			}
+		},
+		{
+			"path": "pages/common/leave",
+			"style": {
+				"navigationBarTitleText": "买家留言",
+				"backgroundColorTop": "#f5f7fa",
+				"backgroundColorBottom": "#f5f7fa"
+			}
 		}
 	],
 	"globalStyle": {

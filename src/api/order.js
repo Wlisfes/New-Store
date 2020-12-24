@@ -8,3 +8,12 @@ export function createOrder(params) {
 		method: 'POST'
 	})
 }
+
+//支付订单
+export function payOrder(params) {
+	return request({
+		url: `/v1/order/pay`,
+		data: params,
+		method: 'GET'
+	})
+}

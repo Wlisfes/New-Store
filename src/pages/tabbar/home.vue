@@ -8,7 +8,7 @@
 			:show-action="false"
 			@click="onSearch"
 		></u-search>
-		<view class="app-swiper">
+		<view class="app-swiper" v-if="banners.length">
 			<u-swiper :list="banners" name="picUrl" @click="onSwipeClick"></u-swiper>
 		</view>
 		<view class="classify" v-if="classify.length">

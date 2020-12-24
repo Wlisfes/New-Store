@@ -1,8 +1,8 @@
 <template>
 	<view class="app-container">
 		<block v-if="uid">
-			<view class="list" v-if="dataSource.length">
-				<view class="list-item" v-for="(item, index) in dataSource" :key="index">
+			<view class="list" v-if="list.length">
+				<view class="list-item" v-for="(item, index) in list" :key="index">
 					<u-swipe-action
 						:show="item.show"
 						:index="index"
@@ -92,7 +92,7 @@
 					<text style="font-size: 26rpx;">全选</text>
 				</u-checkbox>
 				<view class="footer-whole">
-					<text>合计:¥{{ amount / 100 || '0.00' }}</text>
+					<text>合计:¥{{ (amount / 100).toFixed(2) || '0.00' }}</text>
 				</view>
 				<u-button
 					shape="circle"
@@ -170,12 +170,12 @@ export default {
 		...mapState({
 			user: state => state.user,
 			uid: state => state.user.uid,
-			dataSource: state => state.whee.list
+			list: state => state.whee.list
 		}),
 		...mapGetters({
 			checked: 'whee/checked',
 			amount: 'whee/amount',
-			total: 'whee/total'
+			ids: 'whee/ids'
 		})
 	},
 	watch: {
@@ -222,8 +222,13 @@ export default {
 			}
 			return response
 		},
+		//去结算
 		onSubmit() {
-			this.navigateTo(`/pages/common/under?ids=${JSON.stringify([1, 2, 3, 4, 5, 6])}`)
+			if (this.ids.length) {
+				this.navigateTo(`/pages/common/under?ids=${this.ids.join(',')}`)
+			} else {
+				uni.showToast({ title: '请选择商品', icon: 'none' })
+			}
 		}
 	}
 }

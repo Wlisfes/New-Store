@@ -9,7 +9,13 @@ const getters = {
 		return (state.list || []).every(k => k.checked) || false
 	},
 	amount: state => {
-		return state.list.filter(k => k.checked).reduce((prev, curr) => prev + curr.price, 0)
+		return state.list
+			.filter(k => k.checked)
+			.map(k => k.some * k.sku.price)
+			.reduce((prev, curr) => prev + curr, 0)
+	},
+	ids: state => {
+		return state.list.filter(k => k.checked).map(k => k.id)
 	},
 	total: state => {
 		return state.list.filter(k => k.checked).length
@@ -18,12 +24,7 @@ const getters = {
 
 const mutations = {
 	setWhee: (state, list) => {
-		state.list = list.map(k => {
-			return {
-				...k,
-				show: false
-			}
-		})
+		state.list = list.map(k => ({ ...k, checked: false, show: false }))
 	},
 	//购物车item左滑事件
 	onSwipe: (state, props) => {

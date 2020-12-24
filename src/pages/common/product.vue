@@ -148,11 +148,13 @@ export default {
 				if (code === 200) {
 					uni.hideLoading()
 					this.sku.visible = false
-					this.navigateTo(`/pages/common/under?ids=${JSON.stringify([data.id])}`)
+					this.navigateTo(`/pages/common/under?ids=${data.id}`)
 				} else {
 					uni.showToast({ title: message, icon: 'none' })
 				}
 			}
+			//刷新购物车
+			await this.$store.dispatch('whee/list')
 		}
 	}
 }

@@ -15,15 +15,15 @@
 		</view>
 		<view class="keep">
 			<view class="keep-item" @click="() => navigateTo('/pages/mine/wallet')">
-				<view class="keep-number" style="color: #fa3534">20</view>
+				<view class="keep-number" style="color: #fa3534">{{ (user.balance / 100).toFixed(2) || '0.00' }}</view>
 				<view class="keep-name">钱包(元)</view>
 			</view>
 			<view class="keep-item" @click="() => navigateTo('/pages/mine/coupon')">
-				<view class="keep-number">3</view>
+				<view class="keep-number">{{ user.coupon }}</view>
 				<view class="keep-name">优惠券(张)</view>
 			</view>
 			<view class="keep-item" @click="() => navigateTo('/pages/mine/favorite')">
-				<view class="keep-number">12</view>
+				<view class="keep-number">{{ user.star }}</view>
 				<view class="keep-name">我的收藏</view>
 			</view>
 		</view>
@@ -41,7 +41,7 @@
 			<view class="order-conster">
 				<view class="conster-item" @click="() => navigateTo(`/pages/mine/order?current=${1}`)">
 					<view class="relative">
-						<u-badge type="error" count="2" size="mini" :offset="[-8, -8]"> </u-badge>
+						<u-badge type="error" :count="user.haven" size="mini" :offset="[-8, -8]"> </u-badge>
 						<u-image width="80rpx" height="80rpx" src="/static/icons/1606580159010.png" mode="widthFix">
 							<u-loading slot="loading"></u-loading>
 						</u-image>
@@ -50,7 +50,7 @@
 				</view>
 				<view class="conster-item" @click="() => navigateTo(`/pages/mine/order?current=${2}`)">
 					<view class="relative">
-						<u-badge type="error" count="1" size="mini" :offset="[-8, -8]"> </u-badge>
+						<u-badge type="error" :count="user.issue" size="mini" :offset="[-8, -8]"> </u-badge>
 						<u-image width="80rpx" height="80rpx" src="/static/icons/1606580177237.png" mode="widthFix">
 							<u-loading slot="loading"></u-loading>
 						</u-image>
@@ -59,7 +59,7 @@
 				</view>
 				<view class="conster-item" @click="() => navigateTo(`/pages/mine/order?current=${3}`)">
 					<view class="relative">
-						<u-badge type="error" count="12" size="mini" :offset="[-8, -8]"> </u-badge>
+						<u-badge type="error" :count="user.income" size="mini" :offset="[-8, -8]"> </u-badge>
 						<u-image width="80rpx" height="80rpx" src="/static/icons/1606580187289.png" mode="widthFix">
 							<u-loading slot="loading"></u-loading>
 						</u-image>
@@ -68,7 +68,7 @@
 				</view>
 				<view class="conster-item" @click="() => navigateTo(`/pages/mine/order?current=${4}`)">
 					<view class="relative">
-						<u-badge type="error" count="4" size="mini" :offset="[-8, -8]"> </u-badge>
+						<u-badge type="error" :count="user.conter" size="mini" :offset="[-8, -8]"> </u-badge>
 						<u-image width="80rpx" height="80rpx" src="/static/icons/1606580200743.png" mode="widthFix">
 							<u-loading slot="loading"></u-loading>
 						</u-image>
@@ -104,11 +104,12 @@
 
 <script>
 import { mapState } from 'vuex'
+import { AuthCount } from '@/api/user'
 export default {
 	name: 'Mine',
 	data() {
 		return {
-			src: 'https://oss.lisfes.cn/avatar/1592580988216.jpg?x-oss-process=style/resize'
+			src: ''
 		}
 	},
 	computed: {
@@ -119,15 +120,11 @@ export default {
 	onLoad() {},
 	//下拉刷新
 	async onPullDownRefresh() {
-		setTimeout(() => {
-			uni.stopPullDownRefresh()
-		}, 500)
+		await this.$store.dispatch('user/AuthCount')
+		uni.stopPullDownRefresh()
 	},
 	methods: {
-		//路由跳转
-		navigateTo(url) {
-			uni.navigateTo({ url })
-		},
+		//授权登录
 		async AuthUser(e) {
 			const { errMsg, userInfo } = e.detail
 			if (errMsg === 'getUserInfo:ok') {

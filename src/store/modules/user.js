@@ -1,4 +1,4 @@
-import { register, findOne } from '@/api/user'
+import { register, AuthOne, AuthCount } from '@/api/user'
 
 const state = {
 	uid: 0,
@@ -6,7 +6,14 @@ const state = {
 	mobile: '',
 	avatar: '',
 	nickname: '',
-	token: ''
+	token: '',
+	balance: 0,
+	conter: 0,
+	coupon: 0,
+	haven: 0,
+	income: 0,
+	issue: 0,
+	star: 0
 }
 
 const mutations = {
@@ -18,16 +25,34 @@ const mutations = {
 		state.token = user.token
 		state.uid = user.uid
 		uni.setStorage({ key: 'uid', data: user.uid })
+	},
+	setCount: (state, props) => {
+		state.balance = props.balance
+		state.conter = props.conter
+		state.coupon = props.coupon
+		state.haven = props.haven
+		state.income = props.income
+		state.issue = props.issue
+		state.star = props.star
 	}
 }
 
 const actions = {
 	//拉取用户信息
-	findOne: async ({ commit }, props) => {
-		const response = await findOne(props)
+	AuthOne: async ({ commit }, props) => {
+		const response = await AuthOne(props)
 		const { code, data } = response
 		if (code === 200) {
 			commit('setUser', data)
+		}
+		return response
+	},
+	//统计信息
+	AuthCount: async ({ commit }) => {
+		const response = await AuthCount()
+		const { code, data } = response
+		if (code === 200) {
+			commit('setCount', data)
 		}
 		return response
 	},

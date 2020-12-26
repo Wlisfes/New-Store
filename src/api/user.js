@@ -10,7 +10,7 @@ export function register(params) {
 }
 
 //拉取用户信息
-export function findOne(params) {
+export function AuthOne(params) {
 	if (params.uid) {
 		return request({
 			url: `/v1/user/one/uid`,
@@ -24,4 +24,13 @@ export function findOne(params) {
 			method: 'GET'
 		})
 	}
+}
+
+//统计信息
+export function AuthCount(params) {
+	return request({
+		url: `/v1/user/count`,
+		data: params,
+		method: 'GET'
+	})
 }

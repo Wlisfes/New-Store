@@ -14,15 +14,15 @@
 			</view>
 		</view>
 		<view class="keep">
-			<view class="keep-item" @click="() => navigateTo('/pages/mine/wallet')">
+			<view class="keep-item" @click="() => onClick('/pages/mine/wallet')">
 				<view class="keep-number" style="color: #fa3534">{{ (user.balance / 100).toFixed(2) || '0.00' }}</view>
 				<view class="keep-name">钱包(元)</view>
 			</view>
-			<view class="keep-item" @click="() => navigateTo('/pages/mine/coupon')">
+			<view class="keep-item" @click="() => onClick('/pages/mine/coupon')">
 				<view class="keep-number">{{ user.coupon }}</view>
 				<view class="keep-name">优惠券(张)</view>
 			</view>
-			<view class="keep-item" @click="() => navigateTo('/pages/mine/favorite')">
+			<view class="keep-item" @click="() => onClick('/pages/mine/favorite')">
 				<view class="keep-number">{{ user.star }}</view>
 				<view class="keep-name">我的收藏</view>
 			</view>
@@ -35,11 +35,11 @@
 					:font-size="32"
 					:show-line="false"
 					color="#141f33"
-					@click="() => navigateTo(`/pages/mine/order?current=${0}`)"
+					@click="() => onClick(`/pages/mine/order?current=${0}`)"
 				></u-section>
 			</view>
 			<view class="order-conster">
-				<view class="conster-item" @click="() => navigateTo(`/pages/mine/order?current=${1}`)">
+				<view class="conster-item" @click="() => onClick(`/pages/mine/order?current=${1}`)">
 					<view class="relative">
 						<u-badge type="error" :count="user.haven" size="mini" :offset="[-8, -8]"> </u-badge>
 						<u-image width="80rpx" height="80rpx" src="/static/icons/1606580159010.png" mode="widthFix">
@@ -48,7 +48,7 @@
 					</view>
 					<text>待付款</text>
 				</view>
-				<view class="conster-item" @click="() => navigateTo(`/pages/mine/order?current=${2}`)">
+				<view class="conster-item" @click="() => onClick(`/pages/mine/order?current=${2}`)">
 					<view class="relative">
 						<u-badge type="error" :count="user.issue" size="mini" :offset="[-8, -8]"> </u-badge>
 						<u-image width="80rpx" height="80rpx" src="/static/icons/1606580177237.png" mode="widthFix">
@@ -57,7 +57,7 @@
 					</view>
 					<text>待发货</text>
 				</view>
-				<view class="conster-item" @click="() => navigateTo(`/pages/mine/order?current=${3}`)">
+				<view class="conster-item" @click="() => onClick(`/pages/mine/order?current=${3}`)">
 					<view class="relative">
 						<u-badge type="error" :count="user.income" size="mini" :offset="[-8, -8]"> </u-badge>
 						<u-image width="80rpx" height="80rpx" src="/static/icons/1606580187289.png" mode="widthFix">
@@ -66,7 +66,7 @@
 					</view>
 					<text>待收货</text>
 				</view>
-				<view class="conster-item" @click="() => navigateTo(`/pages/mine/order?current=${4}`)">
+				<view class="conster-item" @click="() => onClick(`/pages/mine/order?current=${4}`)">
 					<view class="relative">
 						<u-badge type="error" :count="user.conter" size="mini" :offset="[-8, -8]"> </u-badge>
 						<u-image width="80rpx" height="80rpx" src="/static/icons/1606580200743.png" mode="widthFix">
@@ -84,7 +84,7 @@
 					hover-class="none"
 					:border-bottom="false"
 					title="收货地址"
-					@click="() => navigateTo('/pages/mine/address')"
+					@click="() => onClick('/pages/mine/address')"
 				></u-cell-item>
 				<button class="site-contact" hover-class="none" open-type="contact">
 					<u-cell-item icon="kefu-ermai" :border-bottom="false" title="联系客服"></u-cell-item>
@@ -94,7 +94,7 @@
 					:border-bottom="false"
 					hover-class="none"
 					title="意见反馈"
-					@click="() => navigateTo('/pages/mine/feedback')"
+					@click="() => onClick('/pages/mine/feedback')"
 				></u-cell-item>
 				<u-cell-item icon="setting" :border-bottom="false" hover-class="none" title="设置"></u-cell-item>
 			</u-cell-group>
@@ -105,22 +105,28 @@
 <script>
 import { mapState } from 'vuex'
 import { AuthCount } from '@/api/user'
+import AppLogin from '@/components/common/login'
 export default {
 	name: 'Mine',
-	data() {
-		return {
-			src: ''
-		}
-	},
 	computed: {
 		...mapState({
+			uid: state => state.user.uid,
 			user: state => state.user
 		})
 	},
-	onLoad() {},
+	watch: {
+		uid: {
+			handler(uid) {
+				uid && this.$store.dispatch('user/AuthCount')
+			},
+			immediate: true
+		}
+	},
 	//下拉刷新
 	async onPullDownRefresh() {
-		await this.$store.dispatch('user/AuthCount')
+		if (this.uid) {
+			await this.$store.dispatch('user/AuthCount')
+		}
 		uni.stopPullDownRefresh()
 	},
 	methods: {
@@ -128,12 +134,17 @@ export default {
 		async AuthUser(e) {
 			const { errMsg, userInfo } = e.detail
 			if (errMsg === 'getUserInfo:ok') {
-				const response = await this.$store.dispatch('user/AuthUser', {
+				await this.$store.dispatch('user/AuthUser', {
 					avatar: userInfo.avatarUrl,
 					nickname: userInfo.nickName
 				})
-
-				console.log(response)
+			}
+		},
+		onClick(url) {
+			if (!this.uid) {
+				uni.showToast({ title: '未登录', icon: 'none' })
+			} else {
+				uni.navigateTo({ url })
 			}
 		}
 	}

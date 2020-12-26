@@ -116,6 +116,7 @@
 
 		<AppKeyboardPay
 			:visible="order.visible"
+			:total="order.total"
 			:order="order.id"
 			@close="order.onClose"
 			@submit="order.onSubmit"
@@ -157,8 +158,9 @@ export default {
 			order: {
 				id: 0,
 				visible: false,
-				onClick: async id => {
-					this.order.id = id
+				onClick: async props => {
+					this.order.total = props.total
+					this.order.id = props.id
 					this.order.visible = true
 					return
 				},
@@ -240,7 +242,10 @@ export default {
 			})
 			const { code, data, message } = response
 			if (code === 200) {
-				await this.order.onClick(data.id)
+				await this.order.onClick({
+					id: data.id,
+					total: data.total - data.discount
+				})
 				await this.$store.dispatch('whee/list')
 			} else {
 				uni.showToast({ title: message, icon: 'none' })

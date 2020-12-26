@@ -76,7 +76,10 @@ export default {
 		},
 		async onSubmit() {
 			uni.showLoading({ title: '加载中...' })
-			const response = await payOrder({ order: this.order })
+			const response = await payOrder({
+				order: this.order,
+				password: this.password
+			})
 			if (response.code === 200) {
 				uni.hideLoading()
 				this.password = ''
@@ -90,7 +93,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .money {
 	font-size: 80rpx;
 	color: #fa3534;

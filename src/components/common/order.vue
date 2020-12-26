@@ -1,69 +1,88 @@
 <template>
-	<view :style="[customStyle]">
-		<AppScroll
-			class="scroll"
-			:customStyle="customStyle"
-			:scroll-y="scroll.scrollY"
-			:refresher-enabled="scroll.refresherEnabled"
-			:freshing="scroll.freshing"
-			:triggered="scroll.triggered"
-			@refresh="scroll.onRefresh"
-			@restore="scroll.onRestore"
-		>
-			<view class="app-order">
-				<view class="app-order-item" v-for="(props, index) in dataSource" :key="index">
-					<view class="order-title">
-						<text :style="{ flex: 1, fontWeight: 500 }">订单号: {{ props.orderid }}</text>
-						<text :style="{ color: '#fa3534', fontSize: '26rpx' }">待付款</text>
+	<view class="app-order">
+		<view class="app-order-item" v-for="props in dataSource" :key="props.id">
+			<view class="order-title">
+				<text :style="{ flex: 1, fontWeight: 500 }">订单号: {{ props.order }}</text>
+				<text :style="{ color: '#fa3534', fontSize: '26rpx' }">{{ transform(props.status) }}</text>
+			</view>
+			<view class="order-container" v-for="item in props.whee" :key="item.id" @click.prevent="onStore(item)">
+				<u-image width="200rpx" height="200rpx" :src="item.product.picUrl" mode="widthFix" :border-radius="6">
+					<u-loading slot="loading"></u-loading>
+				</u-image>
+				<view class="content">
+					<view class="content-name">
+						<text class="u-line-2">{{ item.product.title }}</text>
 					</view>
-					<view class="order-container" v-for="(item, idx) in props.products" :key="idx">
-						<u-image
-							width="200rpx"
-							height="200rpx"
-							src="/static/icons/1605967031503.png"
-							mode="widthFix"
-						></u-image>
-						<view class="content">
-							<view class="content-name">
-								<text class="u-line-2">待付款待付款待付款待付款待付款待付款待付款待付款待付款待付</text>
-							</view>
-							<view class="content-format">
-								<text class="u-line-1">规格：</text>
-							</view>
-						</view>
-						<view class="order-info">
-							<view>¥{{ item.price / 100 || '0.00' }}</view>
-							<view class="order-info-number">{{ `x${item.number}` }}</view>
-						</view>
-					</view>
-					<view class="order-total">
-						<text>总价¥1219.50</text>
-						<text>优惠¥219.50</text>
-						<text>实付款</text>
-						<text :style="{ fontSize: '30rpx', fontWeight: 500 }">¥1200</text>
-					</view>
-					<view class="order-footer">
-						<view :style="{ flex: 1 }">
-							<u-icon
-								:custom-style="{ padding: '10rpx' }"
-								name="more-dot-fill"
-								color="#616b80"
-								size="32"
-							></u-icon>
-						</view>
-						<view :style="{ display: 'flex' }">
-							<button class="order-button" hover-class="none">加入购物车</button>
-							<button class="order-button" hover-class="none">取消订单</button>
-							<button class="order-button active" hover-class="none">付款</button>
-						</view>
+					<view class="content-format">
+						<text class="u-line-1">规格：{{ item.sku.skuname }}</text>
 					</view>
 				</view>
+				<view class="order-info">
+					<view>¥{{ (item.sku.price / 100).toFixed(2) || '0.00' }}</view>
+					<view class="order-info-number">{{ `x${item.some}` }}</view>
+				</view>
 			</view>
-		</AppScroll>
+			<view class="order-total">
+				<text>{{ `总价¥${(props.total / 100).toFixed(2) || '0.00'}` }}</text>
+				<text v-if="props.discount">{{ `优惠¥${(props.discount / 100).toFixed(2) || '0.00'}` }}</text>
+				<block v-if="[2, 3, 4].includes(props.status)">
+					<text>实付款</text>
+					<text :style="{ fontSize: '30rpx', fontWeight: 500 }">
+						{{ `¥${((props.total - props.discount) / 100).toFixed(2) || '0.00'}` }}
+					</text>
+				</block>
+			</view>
+			<view class="order-footer">
+				<view :style="{ flex: 1 }">
+					<u-icon
+						:custom-style="{ padding: '10rpx' }"
+						name="more-dot-fill"
+						color="#616b80"
+						size="32"
+					></u-icon>
+				</view>
+				<view :style="{ display: 'flex' }">
+					<button class="order-button" hover-class="none" @click="onSubmit(props, 1)">加入购物车</button>
+					<block v-if="props.status === 1">
+						<button class="order-button" hover-class="none" @click="onSubmit(props, 2)">删除订单</button>
+						<button class="order-button active" hover-class="none" @click="onSubmit(props, 3)">付款</button>
+					</block>
+					<block v-if="props.status === 2">
+						<button class="order-button" hover-class="none" @click="onSubmit(props, 4)">修改地址</button>
+					</block>
+					<block v-else-if="props.status === 3">
+						<button class="order-button" hover-class="none" @click="onSubmit(props, 5)">查看物流</button>
+						<button class="order-button active" hover-class="none" @click="onSubmit(props, 6)">
+							确认收货
+						</button>
+					</block>
+					<block v-else-if="props.status === 4">
+						<button class="order-button" hover-class="none" @click="onSubmit(props, 5)">查看物流</button>
+						<button class="order-button active" hover-class="none" @click="onSubmit(props, 7)">评价</button>
+					</block>
+				</view>
+			</view>
+		</view>
+		<view class="app-loading" v-if="isMore">
+			<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
+		</view>
+		<view class="app-loading" v-if="isEmpty">
+			<u-divider bg-color="rgba(0,0,0,0)">没有更多了</u-divider>
+		</view>
+		<view class="app-loading" v-if="isEmpty1">
+			<u-icon
+				label="暂无相关订单"
+				label-color="#99a0ad"
+				label-pos="bottom"
+				size="200"
+				name="/static/icons/1606631349285.png"
+			></u-icon>
+		</view>
 	</view>
 </template>
 
 <script>
+import { delOrder, incomeOrder } from '@/api/order'
 import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'AppOrder',
@@ -71,81 +90,114 @@ export default {
 		AppScroll
 	},
 	props: {
-		customStyle: {
-			type: Object,
-			default: () => {}
+		dataSource: {
+			type: Array,
+			default: () => []
+		},
+		total: {
+			type: Number,
+			default: 0
+		},
+		offset: {
+			type: Number,
+			default: 0
+		},
+		loading: {
+			type: Boolean,
+			default: true
 		}
 	},
-	data() {
-		return {
-			dataSource: [
-				{
-					id: 1,
-					orderid: 202012091607492199555,
-					status: 1,
-					products: [{ number: 1, price: 59900 }]
-				},
-				{
-					id: 2,
-					orderid: 202012091607495060124,
-					status: 1,
-					products: [
-						{ number: 1, price: 5990 },
-						{ number: 1, price: 599 },
-						{ number: 1, price: 599 }
-					]
-				},
-				{
-					id: 3,
-					orderid: 202012091607495074298,
-					status: 1,
-					products: [
-						{ number: 1, price: 599 },
-						{ number: 1, price: 599 }
-					]
-				}
-			],
-			scroll: {
-				scrollY: true,
-				refresherEnabled: true,
-				freshing: false,
-				triggered: false,
-				onRefresh: () => {
-					console.log('刷新')
-					this.scroll.freshing = true
-					this.scroll.triggered = true
-					setTimeout(() => {
-						this.scroll.triggered = false
-						this.scroll.freshing = false
-					}, 500)
-				},
-				onRestore: () => {
-					console.log('刷新结束')
-					this.scroll.triggered = 'restore'
-				}
+	computed: {
+		//没有更多数据了
+		isEmpty() {
+			return this.total > 0 && this.total === this.offset && !this.loading
+		},
+		//空列表
+		isEmpty1() {
+			return this.total === 0 && !this.loading
+		},
+		//是否还有更多加载
+		isMore() {
+			return this.offset < this.total
+		}
+	},
+	methods: {
+		transform(index) {
+			return ['已取消', '等待买家付款', '等待卖家发货', '等待买家收货', '订单已完成'][index]
+		},
+		onStore(params) {
+			this.$emit('store', { id: params.product.id })
+		},
+		//删除订单
+		async delOrder(id) {
+			uni.showLoading({ title: '加载中...' })
+			const response = await delOrder({ id })
+			const { code, message } = response
+			if (code === 200) {
+				uni.showToast({ title: '删除成功', icon: 'none' })
+			} else {
+				uni.showToast({ title: message, icon: 'none' })
 			}
+			return response
+		},
+		//确认收货
+		async incomeOrder(id) {
+			uni.showLoading({ title: '加载中...' })
+			const response = await incomeOrder({ id })
+			const { code, message } = response
+			if (code === 200) {
+				uni.showToast({ title: '收货成功', icon: 'none' })
+			} else {
+				uni.showToast({ title: message, icon: 'none' })
+			}
+			return response
+		},
+		async onSubmit(params, int) {
+			switch (int) {
+				case 1:
+					console.log('加入购物车')
+					break
+				case 2:
+					await this.delOrder(params.id)
+					break
+				case 6:
+					await this.incomeOrder(params.id)
+					break
+				default:
+					this.$emit('submit', {
+						int,
+						id: params.id,
+						total: params.total - params.discount
+					})
+					break
+			}
+			console.log(int)
 		}
-	},
-	created() {
-		console.log(this.current, this.active)
 	}
 }
 </script>
 
 <style lang="scss" scoped>
 .app-order {
-	padding: 0 30rpx;
+	padding: 0 20rpx;
 	overflow: hidden;
-	background-color: #f5f7fa;
+	background-color: #ffffff;
 	padding-bottom: constant(safe-area-inset-bottom);
 	padding-bottom: env(safe-area-inset-bottom);
+	.app-loading {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 48rpx;
+	}
 	&-item {
 		margin-top: 30rpx;
 		padding: 20rpx;
 		border-radius: 12rpx;
 		overflow: hidden;
-		background-color: #ffffff; //#fa3534;
-		box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.08);
+		background-color: #ffffff;
+		box-shadow: 0rpx 0rpx 14rpx 2rpx rgba(0, 0, 0, 0.2);
 		&:last-child {
 			margin-bottom: 30rpx;
 		}

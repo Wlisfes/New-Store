@@ -83,6 +83,7 @@
 
 <script>
 import { delOrder, incomeOrder } from '@/api/order'
+import { createOrderWhee } from '@/api/whee'
 import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'AppOrder',
@@ -128,13 +129,28 @@ export default {
 		onStore(params) {
 			this.$emit('store', { id: params.product.id })
 		},
+		//加入购物车
+		async createOrderWhee(id) {
+			uni.showLoading({ title: '加载中...' })
+			const response = await createOrderWhee({ order: id })
+			const { code, message } = response
+			if (code === 200) {
+				await this.$store.dispatch('whee/list')
+				uni.showToast({ title: '添加成功' })
+				this.$emit('refresh')
+			} else {
+				uni.showToast({ title: message, icon: 'none' })
+			}
+			return response
+		},
 		//删除订单
 		async delOrder(id) {
 			uni.showLoading({ title: '加载中...' })
 			const response = await delOrder({ id })
 			const { code, message } = response
 			if (code === 200) {
-				uni.showToast({ title: '删除成功', icon: 'none' })
+				uni.showToast({ title: '删除成功' })
+				this.$emit('refresh')
 			} else {
 				uni.showToast({ title: message, icon: 'none' })
 			}
@@ -146,32 +162,49 @@ export default {
 			const response = await incomeOrder({ id })
 			const { code, message } = response
 			if (code === 200) {
-				uni.showToast({ title: '收货成功', icon: 'none' })
+				uni.showToast({ title: '收货成功' })
+				this.$emit('refresh')
 			} else {
 				uni.showToast({ title: message, icon: 'none' })
 			}
 			return response
 		},
 		async onSubmit(params, int) {
+			console.log(int)
 			switch (int) {
 				case 1:
-					console.log('加入购物车')
+					await this.createOrderWhee(params.id)
 					break
 				case 2:
 					await this.delOrder(params.id)
 					break
-				case 6:
-					await this.incomeOrder(params.id)
-					break
-				default:
+				case 3:
 					this.$emit('submit', {
 						int,
 						id: params.id,
 						total: params.total - params.discount
 					})
 					break
+				case 4:
+					//修改地址
+					uni.showToast({ title: '功能暂未开放', icon: 'none' })
+					break
+				case 5:
+					//查看物流
+					uni.showToast({ title: '功能暂未开放', icon: 'none' })
+					break
+				case 6:
+					this.$emit('submit', {
+						int,
+						id: params.id,
+						total: params.total - params.discount
+					})
+					break
+				case 7:
+					//评价
+					uni.showToast({ title: '功能暂未开放', icon: 'none' })
+					break
 			}
-			console.log(int)
 		}
 	}
 }

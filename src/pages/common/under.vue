@@ -172,6 +172,7 @@ export default {
 				onSubmit: () => {
 					this.order.id = 0
 					this.order.visible = false
+					this.$store.dispatch('user/AuthCount')
 					uni.redirectTo({ url: `/pages/mine/order` })
 				}
 			}

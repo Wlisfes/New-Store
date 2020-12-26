@@ -23,6 +23,7 @@
 				:loading="scroll.loading"
 				@store="props => navigateTo(`/pages/common/product?id=${props.id}`)"
 				@submit="scroll.onSubmit"
+				@refresh="scroll.onRefresh"
 			></AppOrder>
 		</view>
 		<AppKeyboardPay
@@ -32,6 +33,7 @@
 			@close="order.onClose"
 			@submit="order.onSubmit"
 		></AppKeyboardPay>
+		<u-back-top :scroll-top="scroll.scrollTop"></u-back-top>
 	</view>
 </template>
 
@@ -50,12 +52,19 @@ export default {
 			order: {
 				id: 0,
 				visible: false,
+
 				total: 0,
+				//支付取消
 				onClose: () => {
 					this.order.id = 0
 					this.order.visible = false
 				},
-				onSubmit: () => {}
+				//支付成功
+				onSubmit: async () => {
+					this.order.onClose()
+					this.scroll.onRefresh()
+					await this.$store.dispatch('user/AuthCount')
+				}
 			},
 			scroll: {
 				current: 0,
@@ -72,6 +81,7 @@ export default {
 					{ name: '待收货' },
 					{ name: '已完成' }
 				],
+				//nav切换刷新
 				onChange: async index => {
 					this.scroll.current = index
 					this.scroll.offset = 0
@@ -79,13 +89,37 @@ export default {
 					this.scroll.loading = true
 					await this.orderList()
 				},
-				onSubmit: props => {
-					console.log(props)
+				//订单支付事件
+				onSubmit: async props => {
 					if (props.int === 3) {
+						//支付订单
 						this.order.total = props.total
 						this.order.id = props.id
 						this.order.visible = true
+					} else if (props.int === 4) {
+						//确认收货
+						console.log(props)
+					} else if (props.int === 6) {
+						//确认收货
+						console.log(props)
 					}
+				},
+				//操作订单后刷新
+				onRefresh: async () => {
+					const { limit, offset, current } = this.scroll
+					this.scroll.loading = true
+					const response = await orderList({
+						offset: 0,
+						limit: offset,
+						status: current
+					})
+					const { code, data } = response
+					if (code === 200) {
+						this.scroll.offset = data.list.length
+						this.scroll.dataSource = data.list
+						this.scroll.total = data.total
+					}
+					this.scroll.loading = false
 				}
 			}
 		}
@@ -98,6 +132,10 @@ export default {
 	onLoad(options) {
 		this.scroll.current = Number(options.current || 0)
 		this.orderList()
+	},
+	//滚动事件
+	onPageScroll(e) {
+		this.scroll.scrollTop = e.scrollTop
 	},
 	//下拉刷新
 	async onPullDownRefresh() {

@@ -81,8 +81,8 @@ export default {
 				password: this.password
 			})
 			if (response.code === 200) {
-				uni.hideLoading()
 				this.password = ''
+				uni.showToast({ title: '付款成功' })
 				this.$emit('submit')
 			} else {
 				this.password = ''

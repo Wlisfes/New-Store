@@ -12,7 +12,7 @@
 				<u-image :width="140" :height="140" :src="picUrl" mode="widthFix" :border-radius="6">
 					<u-loading slot="loading"></u-loading>
 				</u-image>
-				<view :style="{ flex: 1, margin: '0 30rpx', overflow: 'hidden' }">
+				<view :style="{ flex: 1, margin: '0 60rpx 0 30rpx', overflow: 'hidden' }">
 					<view class="conter-title u-line-1">{{ title }}</view>
 				</view>
 			</view>
@@ -22,13 +22,15 @@
 						<view class="format-item-title">{{ item.name }}</view>
 						<view class="format-item-attr">
 							<block v-for="attr in item.attr" :key="attr.attrId">
-								<button
-									class="u-reset-button attr-tags"
-									:class="{ 'attr-active': item.active === attr.attrId }"
-									@click="() => onClick(attr.attrId, index)"
-								>
-									<text>{{ attr.name }}</text>
-								</button>
+								<view>
+									<button
+										class="u-reset-button attr-tags"
+										:class="{ 'attr-active': item.active === attr.attrId }"
+										@click="() => onClick(attr.attrId, index)"
+									>
+										<text>{{ attr.name }}</text>
+									</button>
+								</view>
 							</block>
 						</view>
 					</view>
@@ -189,9 +191,13 @@ export default {
 				display: flex;
 				flex-wrap: wrap;
 				margin-bottom: 20rpx;
+				> view {
+					width: 33.3333%;
+					padding: 0 15rpx 30rpx;
+				}
 			}
 			.attr-tags {
-				width: 210rpx;
+				width: 100%;
 				height: 60rpx;
 				display: flex;
 				align-items: center;
@@ -200,7 +206,7 @@ export default {
 				background-color: #f0f2f5;
 				color: #616b80;
 				border-radius: 6rpx;
-				margin-bottom: 30rpx;
+				margin: 0;
 				&.attr-active {
 					background-color: #ff9900;
 					color: #ffffff;

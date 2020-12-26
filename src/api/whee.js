@@ -27,6 +27,15 @@ export function createWhee(params) {
 	})
 }
 
+//添加订单商品到购物车
+export function createOrderWhee(params) {
+	return request({
+		url: `/v1/whee/create/order`,
+		data: params,
+		method: 'POST'
+	})
+}
+
 //加入购物车缓存
 export function createCacheWhee(params) {
 	return request({

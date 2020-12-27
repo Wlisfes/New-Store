@@ -29,6 +29,7 @@
 		<AppKeyboardPay
 			:visible="order.visible"
 			:total="order.total"
+			:income="order.income"
 			:order="order.id"
 			@close="order.onClose"
 			@submit="order.onSubmit"
@@ -52,7 +53,7 @@ export default {
 			order: {
 				id: 0,
 				visible: false,
-
+				income: false,
 				total: 0,
 				//支付取消
 				onClose: () => {
@@ -93,15 +94,17 @@ export default {
 				onSubmit: async props => {
 					if (props.int === 3) {
 						//支付订单
+						this.order.income = false
 						this.order.total = props.total
 						this.order.id = props.id
 						this.order.visible = true
 					} else if (props.int === 4) {
-						//确认收货
-						console.log(props)
+						//修改地址
 					} else if (props.int === 6) {
 						//确认收货
-						console.log(props)
+						this.order.income = true
+						this.order.id = props.id
+						this.order.visible = true
 					}
 				},
 				//操作订单后刷新

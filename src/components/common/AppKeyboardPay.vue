@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { payOrder } from '@/api/order'
+import { payOrder, incomeOrder } from '@/api/order'
 export default {
 	name: 'AppKeyboardPay',
 	props: {
@@ -48,6 +48,10 @@ export default {
 		order: {
 			type: Number,
 			default: 0
+		},
+		income: {
+			type: Boolean,
+			default: false
 		}
 	},
 	data() {
@@ -76,18 +80,32 @@ export default {
 		},
 		async onSubmit() {
 			uni.showLoading({ title: '加载中...' })
-			const response = await payOrder({
-				order: this.order,
-				password: this.password
-			})
-			if (response.code === 200) {
-				this.password = ''
-				uni.showToast({ title: '付款成功' })
-				this.$emit('submit')
+			if (this.income) {
+				//收货
+				const response = await incomeOrder({
+					id: this.order,
+					password: this.password
+				})
+				if (response.code === 200) {
+					uni.showToast({ title: '收货成功' })
+					this.$emit('submit')
+				} else {
+					uni.showToast({ title: response.message, icon: 'none' })
+				}
 			} else {
-				this.password = ''
-				uni.showToast({ title: response.message, icon: 'none' })
+				//支付
+				const response = await payOrder({
+					order: this.order,
+					password: this.password
+				})
+				if (response.code === 200) {
+					uni.showToast({ title: '付款成功' })
+					this.$emit('submit')
+				} else {
+					uni.showToast({ title: response.message, icon: 'none' })
+				}
 			}
+			this.password = ''
 		}
 	}
 }

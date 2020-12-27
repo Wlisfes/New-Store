@@ -3,10 +3,10 @@
 		<view class="app-coupon">
 			<view
 				class="app-coupon-item"
-				:class="{ active: coupon.total < item.satisfy }"
+				:class="{ active: item.active && item.reducr }"
 				v-for="item in scroll.dataSource"
 				:key="item.id"
-				@click="onClick(item, coupon.total < item.satisfy)"
+				@click="onClick(item)"
 			>
 				<view class="line"></view>
 				<view class="book">
@@ -21,17 +21,22 @@
 					<view class="u-line-1">{{ item.startTime | time | date }}~{{ item.endTime | time | date }}</view>
 				</view>
 				<view class="status">
-					<u-icon
-						v-if="coupon.id == item.id && coupon.total >= item.satisfy"
-						name="checkbox-mark"
-						:size="48"
-						color="#fa3534"
-					></u-icon>
+					<u-icon v-if="coupon.id == item.id" name="checkbox-mark" :size="48" color="#fa3534"></u-icon>
 				</view>
-				<view class="desc-footer" v-if="coupon.total < item.satisfy">
-					<text>不可用原因:</text>
-					<text :style="{ color: '#99a0ad', marginLeft: '10rpx' }">未满足最低金额</text>
-				</view>
+				<block v-if="!item.active">
+					<view class="desc-footer">
+						<text>不可用原因:</text>
+						<text :style="{ color: '#99a0ad', marginLeft: '10rpx' }">
+							{{ `仅限于${item.source.name}商品使用` }}
+						</text>
+					</view>
+				</block>
+				<block v-else-if="!item.reducr">
+					<view class="desc-footer">
+						<text>不可用原因:</text>
+						<text :style="{ color: '#99a0ad', marginLeft: '10rpx' }">未满足最低金额</text>
+					</view>
+				</block>
 			</view>
 			<view class="app-loading" v-if="isMore">
 				<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
@@ -74,6 +79,7 @@ export default {
 		return {
 			coupon: {
 				id: 0,
+				ids: [],
 				total: 0,
 				discount: 0
 			},
@@ -107,6 +113,7 @@ export default {
 		}
 	},
 	onLoad(options) {
+		this.coupon.ids = options.ids.split(',')
 		this.coupon.total = options.total
 		this.coupon.id = options.id
 		this.userCoupon()
@@ -127,6 +134,19 @@ export default {
 		}
 	},
 	methods: {
+		//转换数据格式
+		transformCoupon(dataSource = []) {
+			const { total, ids } = this.coupon
+			return dataSource.map(k => {
+				const active = ids.every(v => v == k.source.id) //查看分类id是否完全一致
+				console.log(active)
+				return {
+					...k,
+					reducr: total >= k.satisfy,
+					active: active
+				}
+			})
+		},
 		//我的优惠劵
 		async userCoupon(concat) {
 			const { offset, limit, dataSource } = this.scroll
@@ -135,10 +155,10 @@ export default {
 			if (code === 200) {
 				if (concat) {
 					this.scroll.offset = offset + data.list.length
-					this.scroll.dataSource = dataSource.concat(data.list)
+					this.scroll.dataSource = dataSource.concat(this.transformCoupon(data.list))
 				} else {
 					this.scroll.offset = data.list.length
-					this.scroll.dataSource = data.list
+					this.scroll.dataSource = this.transformCoupon(data.list)
 				}
 				this.scroll.total = data.total
 				this.scroll.loading = false
@@ -146,8 +166,8 @@ export default {
 			return response
 		},
 		//选择优惠劵
-		onClick(props, satisfy) {
-			if (!satisfy) {
+		onClick(props) {
+			if (props.reducr && props.active) {
 				const reset = this.coupon.id === props.id
 				if (reset) {
 					this.coupon.id = 0
@@ -179,7 +199,7 @@ export default {
 	padding: 0 20rpx 100rpx;
 	overflow: hidden;
 	&-item {
-		height: 180rpx;
+		height: 240rpx;
 		display: flex;
 		margin-top: 30rpx;
 		border-radius: 12rpx;
@@ -188,23 +208,27 @@ export default {
 		position: relative;
 		padding-left: 10rpx;
 		box-shadow: 0rpx 0rpx 20rpx rgba(0, 0, 0, 0.15);
+		padding-bottom: 60rpx;
 		&:last-child {
 			margin-bottom: 30rpx;
 		}
 		&.active {
-			height: 240rpx;
-			padding-bottom: 60rpx;
+			height: 180rpx;
+			padding-bottom: 0;
 			.line {
-				background-color: #99a0ad;
+				background-color: #ff5a47;
 			}
-			.book-amount,
-			.book-desc {
-				color: #99a0ad;
+			.book {
+				&-amount {
+					color: #fa3534;
+				}
+				&-desc {
+					color: #141f33;
+				}
 			}
 			.content {
-				color: #99a0ad;
 				.name {
-					color: #99a0ad;
+					color: #141f33;
 				}
 			}
 		}
@@ -214,7 +238,7 @@ export default {
 			position: absolute;
 			left: 0;
 			top: 0;
-			background-color: #ff5a47;
+			background-color: #99a0ad;
 		}
 		.book {
 			width: 180rpx;
@@ -223,11 +247,11 @@ export default {
 			justify-content: center;
 			align-items: center;
 			&-amount {
-				color: #fa3534;
+				color: #99a0ad;
 				font-size: 48rpx;
 			}
 			&-desc {
-				color: #141f33;
+				color: #99a0ad;
 				font-size: 26rpx;
 			}
 		}
@@ -247,7 +271,7 @@ export default {
 			color: #99a0ad;
 			.name {
 				font-size: 32rpx;
-				color: #141f33;
+				color: #99a0ad;
 				font-weight: 500;
 			}
 			.desc {

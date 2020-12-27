@@ -144,11 +144,13 @@ export default {
 			loading: true,
 			coupon: {
 				id: 0,
+				ids: [],
 				discount: 0,
 				total: 0,
 				dataSource: [],
 				onNavigateTo: () => {
-					this.navigateTo(`/pages/common/coupon?id=${this.coupon.id}&total=${this.total}`)
+					const { id, ids } = this.coupon
+					this.navigateTo(`/pages/common/coupon?id=${id}&total=${this.total}&ids=${ids.join(',')}`)
 				},
 				onClick: props => {
 					this.coupon.id = props.id
@@ -209,8 +211,10 @@ export default {
 		async wheeAnd() {
 			const { ids } = this.useOptions()
 			const response = await wheeAnd({ ids: ids.split(',') })
-			if (response.code === 200) {
-				this.dataSource = response.data
+			const { code, data } = response
+			if (code === 200) {
+				this.coupon.ids = data.map(k => k.product.source.id)
+				this.dataSource = data
 			}
 			return response
 		},

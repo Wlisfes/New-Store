@@ -105,7 +105,6 @@
 <script>
 import { mapState } from 'vuex'
 import { AuthCount } from '@/api/user'
-import AppLogin from '@/components/common/login'
 export default {
 	name: 'Mine',
 	computed: {

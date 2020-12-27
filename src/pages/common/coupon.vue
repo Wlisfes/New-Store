@@ -14,9 +14,9 @@
 					<view class="book-desc">{{ `满${item.satisfy / 100}可用` }}</view>
 				</view>
 				<view class="content">
-					<view class="name u-line-1">水果专享卷</view>
+					<view class="name u-line-1">{{ `${item.source.name}专享卷` }}</view>
 					<view class="desc u-line-2">
-						<text>仅用于{{ item.source.map(k => k.name).join('、') }}</text>
+						<text>{{ item.desc }}</text>
 					</view>
 					<view class="u-line-1">{{ item.startTime | time | date }}~{{ item.endTime | time | date }}</view>
 				</view>

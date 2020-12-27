@@ -10,4 +10,10 @@ export function userCoupon(params) {
 }
 
 //获取分类下优惠劵
-export function sourceCoupon(params) {}
+export function sourceCoupon(params) {
+	return request({
+		url: `/v1/coupon/source`,
+		data: params,
+		method: 'GET'
+	})
+}

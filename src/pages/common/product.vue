@@ -53,8 +53,8 @@
 <script>
 import { productInfo } from '@/api/common'
 import { createWhee, createCacheWhee } from '@/api/whee'
-import AppFooter from '@/components/common/footer'
-import AppSku from '@/components/common/sku'
+import AppFooter from '@/components/common/AppFooter'
+import AppSku from '@/components/common/AppSku'
 export default {
 	name: 'Product',
 	components: {

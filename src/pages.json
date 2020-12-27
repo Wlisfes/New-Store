@@ -57,7 +57,10 @@
 			"path": "pages/mine/coupon",
 			"style": {
 				"navigationBarTitleText": "优惠卷",
-				"backgroundColorBottom": "#f5f7fa"
+				"backgroundColorTop": "#ffffff",
+				"backgroundColorBottom": "#ffffff",
+				"onReachBottomDistance": 500,
+				"enablePullDownRefresh": true
 			}
 		},
 		{

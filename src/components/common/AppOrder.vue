@@ -84,12 +84,8 @@
 <script>
 import { delOrder, incomeOrder } from '@/api/order'
 import { createOrderWhee } from '@/api/whee'
-import AppScroll from '@/components/common/scroll'
 export default {
 	name: 'AppOrder',
-	components: {
-		AppScroll
-	},
 	props: {
 		dataSource: {
 			type: Array,

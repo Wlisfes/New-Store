@@ -130,7 +130,7 @@ import { wheeAnd } from '@/api/whee'
 import { address } from '@/api/address'
 import { userCoupon } from '@/api/coupon'
 import { createOrder } from '@/api/order'
-import AppKeyboardPay from '@/components/common/keyboardPay'
+import AppKeyboardPay from '@/components/common/AppKeyboardPay'
 export default {
 	name: 'Under',
 	components: {

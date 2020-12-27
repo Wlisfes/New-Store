@@ -39,8 +39,8 @@
 
 <script>
 import { orderList } from '@/api/order'
-import AppOrder from '@/components/common/order'
-import AppKeyboardPay from '@/components/common/keyboardPay'
+import AppOrder from '@/components/common/AppOrder'
+import AppKeyboardPay from '@/components/common/AppKeyboardPay'
 export default {
 	name: 'Order',
 	components: {

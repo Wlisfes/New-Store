@@ -126,8 +126,8 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { productLove } from '@/api/common'
-import AppLogin from '@/components/common/login'
-import AppList from '@/components/common/list'
+import AppLogin from '@/components/common/AppLogin'
+import AppList from '@/components/common/AppList'
 export default {
 	name: 'Whee',
 	components: {

@@ -16,7 +16,7 @@
 					<view class="card-name u-line-1">{{ item.title }}</view>
 					<view class="coupon">
 						<view class="sales">{{ `已销 ${item.sales} 笔` }}</view>
-						<block v-for="(coupon, index) in item.coupon" :key="coupon.id">
+						<block v-for="(coupon, index) in item.source.coupon" :key="coupon.id">
 							<u-tag
 								v-if="index < 1"
 								:text="`满${coupon.satisfy / 100}减${coupon.discount / 100}`"

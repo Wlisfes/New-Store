@@ -8,3 +8,6 @@ export function userCoupon(params) {
 		method: 'GET'
 	})
 }
+
+//获取分类下优惠劵
+export function sourceCoupon(params) {}

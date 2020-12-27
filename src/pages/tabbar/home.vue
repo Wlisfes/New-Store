@@ -70,7 +70,7 @@
 						</view>
 						<view class="list-content-footer">
 							<view class="sales">{{ `已销 ${k.sales} 笔` }}</view>
-							<block v-for="(item, index) in k.coupon" :key="item.id">
+							<block v-for="(item, index) in k.source.coupon" :key="item.id">
 								<u-tag
 									v-if="index < 2"
 									:text="`满${item.satisfy / 100}减${item.discount / 100}`"

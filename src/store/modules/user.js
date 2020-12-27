@@ -68,13 +68,10 @@ const actions = {
 					if (response.code === 200) {
 						uni.hideLoading()
 						commit('setUser', data)
-						resolve(response)
 					} else {
-						uni.showToast({
-							title: message,
-							icon: 'none'
-						})
+						uni.showToast({ title: message, icon: 'none' })
 					}
+					resolve(response)
 				}
 			})
 		})

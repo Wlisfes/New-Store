@@ -51,7 +51,7 @@
 					class="u-reset-button sub-bottom"
 					:style="{ backgroundColor: app.error }"
 					open-type="getUserInfo"
-					@getuserinfo="e => AuthUser(3, 4)"
+					@getuserinfo="e => AuthUser(e, 4)"
 				>
 					<text>加入购物车</text>
 				</button>
@@ -104,12 +104,12 @@ export default {
 		async AuthUser(e, sumber) {
 			const { errMsg, userInfo } = e.detail
 			if (errMsg === 'getUserInfo:ok') {
-				const { code } = await this.$store.dispatch('user/AuthUser', {
+				const response = await this.$store.dispatch('user/AuthUser', {
 					avatar: userInfo.avatarUrl,
 					nickname: userInfo.nickName
 				})
-				if (code === 200) {
-					this.onClick(sumber)
+				if (response.code === 200) {
+					this.$emit('click', sumber)
 				}
 			}
 		},

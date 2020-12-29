@@ -35,7 +35,12 @@
 			</view>
 		</view>
 		<view class="app-footer">
-			<AppFooter @click="onClick"></AppFooter>
+			<AppFooter
+				:star="product.star"
+				:pid="product.pid"
+				@click="footer.onClick"
+				@refresh="footer.onRefresh"
+			></AppFooter>
 		</view>
 		<AppSku
 			:visible.sync="sku.visible"
@@ -64,6 +69,7 @@ export default {
 	data() {
 		return {
 			product: {
+				pid: 0,
 				banner: [],
 				content: [],
 				sku: [],
@@ -81,6 +87,18 @@ export default {
 				sumber: 0,
 				onClick: () => {
 					this.sku.visible = true
+				}
+			},
+			footer: {
+				//底部菜单点击事件
+				onClick: sumber => {
+					if ([4, 5].includes(sumber)) {
+						this.sku.sumber = sumber
+						this.sku.visible = true
+					}
+				},
+				onRefresh: () => {
+					this.productInfo()
 				}
 			}
 		}
@@ -104,11 +122,12 @@ export default {
 			const response = await productInfo({ id })
 			const { code, data } = response
 			if (code === 200) {
+				this.product.pid = id
 				this.product.banner = data.banner
 				this.product.content = data.content
 				this.product.sku = data.sku
 				this.product.format = data.format
-				this.product.star = data.star
+				this.product.star = !!data.star
 				this.product.title = data.title
 				this.product.picUrl = data.picUrl
 				this.product.price = data.price
@@ -116,13 +135,6 @@ export default {
 				this.product.sales = data.sales
 			}
 			return response
-		},
-		//底部菜单点击事件
-		onClick(sumber) {
-			if ([4, 5].includes(sumber)) {
-				this.sku.sumber = sumber
-				this.sku.visible = true
-			}
 		},
 		//suk组件确定事件
 		async onSubmit(ops) {

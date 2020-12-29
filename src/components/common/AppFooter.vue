@@ -25,14 +25,14 @@
 		<view class="app-item u-border-bottom u-border-right">
 			<block v-if="uid">
 				<view class="app-item-box" @click="() => onClick(3)">
-					<u-icon name="star" :size="38" color="#616b80"></u-icon>
-					<view class="text u-line-1">收藏</view>
+					<u-icon :name="star ? 'star-fill' : 'star'" :size="38" :color="starColor"></u-icon>
+					<view class="text u-line-1" :style="{ color: starColor }">收藏</view>
 				</view>
 			</block>
 			<block v-else>
 				<button class="u-reset-button" open-type="getUserInfo" @getuserinfo="e => AuthUser(e, 3)">
-					<u-icon name="star" :size="38" color="#616b80"></u-icon>
-					<view class="text u-line-1">收藏</view>
+					<u-icon :name="star ? 'star-fill' : 'star'" :size="38" :color="starColor"></u-icon>
+					<view class="text u-line-1" :style="{ color: starColor }">收藏</view>
 				</button>
 			</block>
 		</view>
@@ -83,8 +83,19 @@
 
 <script>
 import { mapState } from 'vuex'
+import { createStar, delStar } from '@/api/star'
 export default {
 	name: 'AppFooter',
+	props: {
+		pid: {
+			type: Number,
+			default: 0
+		},
+		star: {
+			type: Boolean,
+			default: false
+		}
+	},
 	data() {
 		return {
 			app: {
@@ -97,7 +108,10 @@ export default {
 		...mapState({
 			uid: state => state.user.uid,
 			dataSource: state => state.whee.list
-		})
+		}),
+		starColor() {
+			return this.star ? '#fa3534' : '#616b80'
+		}
 	},
 	methods: {
 		//授权登录
@@ -114,7 +128,42 @@ export default {
 			}
 		},
 		onClick(sumber) {
+			if (sumber === 3) {
+				this.useStar()
+				return
+			}
 			this.$emit('click', sumber)
+		},
+		//收藏操作
+		async useStar() {
+			uni.showLoading({ title: '加载中...' })
+			if (this.star) {
+				const response = await delStar({ id: this.pid })
+				const { code, data, message } = response
+				if (code === 200) {
+					uni.showToast({
+						title: data,
+						success: () => {
+							this.$emit('refresh')
+						}
+					})
+				} else {
+					uni.showToast({ title: message, icon: 'none' })
+				}
+			} else {
+				const response = await createStar({ id: this.pid })
+				const { code, data, message } = response
+				if (code === 200) {
+					uni.showToast({
+						title: data,
+						success: () => {
+							this.$emit('refresh')
+						}
+					})
+				} else {
+					uni.showToast({ title: message, icon: 'none' })
+				}
+			}
 		}
 	}
 }

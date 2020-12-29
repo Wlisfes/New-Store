@@ -12,14 +12,16 @@
 		@backspace="onBackspace"
 	>
 		<view>
-			<view class="u-text-center u-padding-20 money">
-				<text>{{ (total / 100).toFixed(2) || '0.00' }}</text>
-				<text class="u-font-20 u-padding-left-10">元</text>
+			<view class="u-text-center money" :style="{ padding: '20rpx 20rpx 0' }">
+				<block v-if="!income">
+					<text>{{ (total / 100).toFixed(2) || '0.00' }}</text>
+					<text class="u-font-20 u-padding-left-10">元</text>
+				</block>
 				<view class="u-padding-10 close" @click="onClose">
 					<u-icon name="close" color="#333333" size="28"></u-icon>
 				</view>
 			</view>
-			<view class="u-flex u-row-center" :style="{ marginBottom: '30rpx' }">
+			<view class="u-flex u-row-center" :style="{ margin: '30rpx 0' }">
 				<u-message-input
 					mode="box"
 					:maxlength="6"

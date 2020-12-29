@@ -1,117 +1,148 @@
 <template>
-	<view class="app-container" @touchmove.stop>
-		<view class="app-header">
-			<u-tabs
-				class="app-header-nav"
-				:list="form.navs"
-				:current="form.current"
-				:show-bar="false"
-				:height="56"
-				:font-size="28"
-				:bold="false"
-				:bar-height="0"
-				active-color="#ffffff"
-				:active-item-style="{ backgroundColor: '#ffb41f' }"
-				@change="index => (form.current = index)"
-			></u-tabs>
-		</view>
-		<AppScroll
-			class="scroll"
-			:customStyle="scroll.customStyle"
-			:scroll-y="scroll.scrollY"
-			:refresher-enabled="scroll.refresherEnabled"
-			:lower-threshold="500"
-			:freshing="scroll.freshing"
-			:triggered="scroll.triggered"
-			@refresh="scroll.onRefresh"
-			@restore="scroll.onRestore"
-		>
-			<view class="list">
-				<view
-					class="list-item"
-					v-for="(item, index) in scroll.dataSource"
-					:key="index"
-					@click="() => navigateTo('/pages/home/product')"
-				>
-					<view class="back-image">
-						<u-image width="200rpx" height="200rpx" src="/static/icons/1605967031503.png" mode="widthFix">
-							<u-loading slot="loading"></u-loading>
-						</u-image>
+	<view class="app-container">
+		<view class="list">
+			<view
+				class="list-item"
+				v-for="item in scroll.dataSource"
+				:key="item.id"
+				@click="() => navigateTo(`/pages/common/product?id=${item.product.id}`)"
+			>
+				<view class="back-image">
+					<u-image width="200rpx" height="200rpx" :src="item.product.picUrl" mode="widthFix">
+						<u-loading slot="loading"></u-loading>
+					</u-image>
+				</view>
+				<view class="list-content">
+					<view class="title u-line-2">{{ item.product.title }}</view>
+					<view class="format">
+						<!-- <text class="u-line-1">规格：</text> -->
 					</view>
-					<view class="list-content">
-						<view class="title u-line-2">{{ item.title }}</view>
-						<view class="format">
-							<text class="u-line-1">规格：</text>
-						</view>
-						<view class="coin">
-							<view class="coin-num u-line-1">¥29.9</view>
+					<view class="coin">
+						<view class="coin-num u-line-1">{{ `¥${item.product.price / 100 || '0.00'}` }}</view>
+						<view v-if="false" @click="() => onDelStar(item.id)">
+							<u-icon name="trash" color="#99a0ad" size="40"></u-icon>
 						</view>
 					</view>
 				</view>
 			</view>
-		</AppScroll>
+			<view class="app-loading" v-if="isMore">
+				<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
+			</view>
+			<view class="app-loading" v-if="isEmpty">
+				<u-divider bg-color="rgba(0,0,0,0)">没有更多了</u-divider>
+			</view>
+			<view class="app-loading" v-if="isEmpty1">
+				<u-icon
+					label="你还没有收藏任何商品噢"
+					label-color="#99a0ad"
+					label-pos="bottom"
+					size="200"
+					name="/static/icons/1606631363333.png"
+				></u-icon>
+			</view>
+		</view>
+		<view class="app-loading" v-if="isLoading">
+			<u-loading mode="circle" size="48" color="#ffb41f">加载中</u-loading>
+		</view>
+		<u-back-top :scroll-top="scroll.scrollTop"></u-back-top>
 	</view>
 </template>
 
 <script>
-import AppScroll from '@/components/common/scroll'
+import { userStar, delStar } from '@/api/star'
 export default {
 	name: 'Favorite',
-	components: {
-		AppScroll
-	},
 	data() {
 		return {
-			form: {
-				current: 0,
-				navs: [
-					{ id: 1, name: '水果', picUrl: '/static/icons/1605951261225.png' },
-					{ id: 2, name: '蔬菜', picUrl: '/static/icons/1605960766279.png' },
-					{ id: 3, name: '家禽', picUrl: '/static/icons/1605960791822.png' },
-					{ id: 4, name: '家畜', picUrl: '/static/icons/1605960804484.png' },
-					{ id: 5, name: '水产', picUrl: '/static/icons/1605960827823.png' },
-					{ id: 6, name: '蛋类', picUrl: '/static/icons/1605960843547.png' },
-					{ id: 7, name: '卤制品', picUrl: '/static/icons/1605960853385.png' },
-					{ id: 8, name: '饮品', picUrl: '/static/icons/1605960866246.png' },
-					{ id: 9, name: '粮油', picUrl: '/static/icons/1605960878178.png' },
-					{ id: 10, name: '熟食烘培', picUrl: '/static/icons/1605960888670.png' }
-				],
-				onSort: sort => {
-					this.form.sort = sort
-				}
-			},
 			scroll: {
-				dataSource: Object.keys([...Array(10)]).map(i => ({
-					id: i,
-					title: '长安回望绣成堆，山顶千门次第开，一骑红尘妃子笑，无人知是荔枝来',
-					show: false,
-					checked: false
-				})),
-				customStyle: { height: '100%' },
-				scrollY: true,
-				refresherEnabled: true,
-				freshing: false,
-				triggered: false,
-				onRefresh: () => {
-					console.log('刷新')
-					this.scroll.freshing = true
-					this.scroll.triggered = true
-					setTimeout(() => {
-						this.scroll.triggered = false
-						this.scroll.freshing = false
-					}, 500)
-				},
-				onRestore: () => {
-					console.log('刷新结束')
-					this.scroll.triggered = 'restore'
-				}
+				dataSource: [],
+				total: 0,
+				offset: 0,
+				limit: 10,
+				loading: true,
+				scrollTop: 0
 			}
 		}
 	},
+	computed: {
+		isLoading() {
+			return this.scroll.total === 0 && this.scroll.loading
+		},
+		//没有更多数据了
+		isEmpty() {
+			return this.scroll.total > 0 && this.scroll.total === this.scroll.offset && !this.scroll.loading
+		},
+		//空列表
+		isEmpty1() {
+			return this.scroll.total === 0 && !this.scroll.loading
+		},
+		//是否还有更多加载
+		isMore() {
+			return this.scroll.offset < this.scroll.total
+		}
+	},
+	onLoad() {
+		this.userStar()
+	},
+	//滚动事件
+	onPageScroll(e) {
+		this.scroll.scrollTop = e.scrollTop
+	},
+	//下拉刷新
+	async onPullDownRefresh() {
+		this.scroll.offset = 0
+		this.scroll.loading = true
+		await this.userStar()
+		uni.stopPullDownRefresh()
+	},
+	//上拉加载
+	async onReachBottom() {
+		const { offset, total, dataSource, loading } = this.scroll
+		if (offset < total && !loading) {
+			this.scroll.loading = true
+			await this.userStar(true)
+		}
+	},
 	methods: {
-		//路由跳转
-		navigateTo(url) {
-			uni.navigateTo({ url })
+		//我的收藏列表
+		async userStar(concat) {
+			const { offset, limit, total, dataSource } = this.scroll
+			const response = await userStar({ offset, limit })
+			const { code, data } = response
+			if (code === 200) {
+				if (concat) {
+					this.scroll.offset = offset + data.list.length
+					this.scroll.dataSource = dataSource.concat(data.list)
+				} else {
+					this.scroll.offset = data.list.length
+					this.scroll.dataSource = data.list
+				}
+				this.scroll.total = data.total
+			}
+			this.scroll.loading = false
+			return response
+		},
+		//取消收藏
+		async onDelStar(id) {
+			uni.showModal({
+				title: '提示',
+				content: '这是一个模态弹窗',
+				success: function(res) {
+					if (res.confirm) {
+						console.log('用户点击确定')
+					} else if (res.cancel) {
+						console.log('用户点击取消')
+					}
+				}
+			})
+			// uni.showLoading({title: '加载中'})
+			// const response = await delStar({ id })
+			// if (response.code === 200) {
+			// 	uni.showToast({ title: '删除成功', icon: 'none' })
+
+			// } else {
+			// 	uni.showToast({ title: response.message, icon: 'none' })
+			// }
 		}
 	}
 }
@@ -119,33 +150,17 @@ export default {
 
 <style lang="scss" scoped>
 .app-container {
-	height: 100vh;
-	overflow: hidden;
-	background-color: #f5f7fa;
-	.scroll {
-		flex: 1;
-		overflow: hidden;
-		.app-loading {
-			background-color: #f5f7fa;
-			text-align: center;
-			padding: 32rpx;
-		}
-	}
-	.app-header {
-		padding: 12rpx 24rpx 24rpx;
-		background-color: #ffffff;
-		&-nav {
-			/deep/ .u-tab-item {
-				background-color: #f0f2f5;
-				margin-right: 24rpx;
-				border-radius: 8rpx;
-				color: #141f33;
-			}
-		}
+	background-color: #ffffff;
+	.app-loading {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 48rpx;
 	}
 }
 .list {
-	padding: 0 30rpx;
+	padding: 0 20rpx;
 	overflow: hidden;
 	padding-bottom: constant(safe-area-inset-bottom);
 	padding-bottom: env(safe-area-inset-bottom);
@@ -156,7 +171,7 @@ export default {
 		margin-top: 30rpx;
 		padding: 20rpx;
 		background-color: #ffffff;
-		box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.08);
+		box-shadow: 0rpx 0rpx 14rpx 2rpx rgba(0, 0, 0, 0.2);
 		&:last-child {
 			margin-bottom: 30rpx;
 		}

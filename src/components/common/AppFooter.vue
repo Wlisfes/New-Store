@@ -143,8 +143,9 @@ export default {
 				if (code === 200) {
 					uni.showToast({
 						title: data,
-						success: () => {
+						success: async () => {
 							this.$emit('refresh')
+							this.$store.dispatch('user/AuthCount')
 						}
 					})
 				} else {
@@ -156,8 +157,9 @@ export default {
 				if (code === 200) {
 					uni.showToast({
 						title: data,
-						success: () => {
+						success: async () => {
 							this.$emit('refresh')
+							this.$store.dispatch('user/AuthCount')
 						}
 					})
 				} else {

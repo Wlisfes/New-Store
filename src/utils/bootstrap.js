@@ -7,6 +7,7 @@ export default function() {
 			const { code } = await store.dispatch('user/AuthOne', { uid: response.data })
 			if (code === 200) {
 				await store.dispatch('user/AuthCount')
+				await store.dispatch('whee/list')
 			}
 		}
 	})

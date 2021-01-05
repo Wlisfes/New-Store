@@ -9,6 +9,15 @@ export function whee(params) {
 	})
 }
 
+//修改购物车商品数量
+export function wheeSome(params) {
+	return request({
+		url: `/v1/whee/some`,
+		data: params,
+		method: 'PUT'
+	})
+}
+
 //批量获取购物车
 export function wheeAnd(params) {
 	return request({

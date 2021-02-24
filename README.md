@@ -25,14 +25,14 @@ npm run build:mp-weixin   微信小程序打包
 
 # 界面欣赏
 
-![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614141927232.png)
-![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142006375.png)
-![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142012328.png)
-![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142018584.png)
-![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142024726.png)
-![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142030398.png)
-![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142035784.png)
-![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142042004.png)
+![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614141927232.jpg)
+![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142006375.jpg)
+![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142012328.jpg)
+![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142018584.jpg)
+![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142024726.jpg)
+![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142030398.jpg)
+![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142035784.jpg)
+![](https://raw.githubusercontent.com/Wlisfes/New-Store/master/Screenshot/1614142042004.jpg)
 
 
 ## 其他说明

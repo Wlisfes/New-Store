@@ -42,9 +42,11 @@
 										<u-number-box
 											class="coin-number"
 											:value="item.some"
+											:min="1"
 											disabled-input
 											:input-width="64"
 											:input-height="44"
+											@change="({ value }) => onChange(item, value)"
 										></u-number-box>
 									</view>
 								</view>
@@ -126,6 +128,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { productLove } from '@/api/common'
+import { wheeSome } from '@/api/whee'
 import AppLogin from '@/components/common/AppLogin'
 import AppList from '@/components/common/AppList'
 export default {
@@ -228,6 +231,21 @@ export default {
 				this.navigateTo(`/pages/common/under?ids=${this.ids.join(',')}`)
 			} else {
 				uni.showToast({ title: '请选择商品', icon: 'none' })
+			}
+		},
+		//修改商品数量
+		async onChange(ops, value) {
+			uni.showLoading({ title: '加载中', mask: true })
+			const response = await wheeSome({
+				id: ops.id,
+				some: value
+			})
+			const { code, message } = response
+			if (code === 200) {
+				await this.$store.dispatch('whee/list')
+				uni.hideLoading()
+			} else {
+				uni.showToast({ title: message, icon: 'none' })
 			}
 		}
 	}
